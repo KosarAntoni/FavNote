@@ -3,6 +3,7 @@
     "react-app",
     "airbnb"
   ],
+  "parser": "babel-eslint",
   "env": {
     "jest": true
   },
@@ -10,6 +11,7 @@
     "document": true
   },
   "rules": {
+    "react/state-in-constructor": [0],
     "import/prefer-default-export":  0,
     "react/jsx-filename-extension": [
       1,

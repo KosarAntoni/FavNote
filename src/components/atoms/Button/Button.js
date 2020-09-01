@@ -1,23 +1,30 @@
 import styled, { css } from 'styled-components';
 
 const Button = styled.button`
+  display: flex;
+  justify-content: center;
+  align-items: center;
   padding: 0;
-  background-color: ${({ theme }) => theme.primary} ;
-  width: 220px;
-  height: 47px;
-  border: none;
-  border-radius: 50px;
+  border-width: 1px;
+  border-style: solid;
+  border-color: ${({ theme }) => theme.notes} ;
+  background-color: ${({ theme }) => theme.notes} ;
+
+  width: 12rem;
+  height: 4rem;
+  border-radius: 0.5rem;
   font-weight: 600;
-  font-size: 16px;
+  font-size: ${({ theme }) => theme.fontSize.xs};
+  color: ${({ theme }) => theme.black};
   text-transform: uppercase;
+  
+  cursor: pointer;
   
   ${({ secondary }) => (
     secondary && css`
-      background-color: ${({ theme }) => theme.grey200};
-      width: 105px;
-      height: 30px;
-      font-size: 10px;
-`
+      border-color: ${({ theme }) => theme.grey300};
+      background: transparent;
+    `
   )};
 `;
 
