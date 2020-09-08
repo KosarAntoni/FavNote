@@ -5,14 +5,22 @@ const Input = styled.input`
   padding: 1.5rem 3rem;
   font-size: ${({ theme }) => theme.fontSize.s};
   font-weight: ${({ theme }) => theme.regular};
-  background-color: ${({ theme }) => theme.grey100};
-  border: none;
-  border-radius: 50px;
+  border: 1px solid ${({ theme }) => theme.grey200};
+  border-radius: 1rem;
+  transition: all 0.3s;
 
   ::placeholder {
     text-transform: uppercase;
+    font-family: "Montserrat", sans-serif;
+    font-weight: ${({ theme }) => theme.regular};
     letter-spacing: 1px;
     color: ${({ theme }) => theme.grey300};
+  }
+  
+  &:focus {
+    outline: none;
+    border-color: transparent;
+    box-shadow: 0 0 0 2px ${({ theme, activecolor }) => (activecolor ? theme[activecolor] : theme.notes)} ;
   }
   
   ${({ search }) => (

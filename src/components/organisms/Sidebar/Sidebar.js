@@ -8,6 +8,7 @@ import penIcon from 'assets/pen-alt-solid.svg';
 import twitterIcon from 'assets/twitter-brands.svg';
 import PropTypes from 'prop-types';
 import { routes } from 'routes';
+import withContext from 'hoc/withContext';
 
 const SidebarWraper = styled.div`
     z-index: 20;
@@ -20,8 +21,10 @@ const SidebarWraper = styled.div`
     left: 0;
     bottom: 0;
     width: 100%;
+    height: 8rem;
     
     border-radius: 1rem 1rem 0 0;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.01), 0 4px 8px rgba(0, 0, 0, 0.02), 0 1px 12px rgba(0, 0, 0, 0.12);
     background-color: ${({ theme, activeColor }) => (activeColor ? theme[activeColor] : theme.note)};
 
     @media screen and ${({ theme: { viewPorts } }) => viewPorts.viewport7} {
@@ -31,9 +34,10 @@ const SidebarWraper = styled.div`
       flex-direction: column;
       align-items: center;
       width: 10rem;
+      height: auto;
       padding: 1rem;
       border-radius: 1rem;
-      box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.16), 0px 2px 4px rgba(0, 0, 0, 0.12), 0px 1px 8px rgba(0, 0, 0, 0.1);    
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.16), 0 2px 4px rgba(0, 0, 0, 0.12), 0 1px 8px rgba(0, 0, 0, 0.1);    
     }
 `;
 
@@ -54,8 +58,8 @@ const ButtonsWrapper = styled.ul`
       }
 `;
 
-const Sidebar = ({ pageType }) => (
-  <SidebarWraper activeColor={pageType}>
+const Sidebar = ({ pageContext }) => (
+  <SidebarWraper activeColor={pageContext}>
     <ButtonsWrapper>
       <li>
         <ButtonIcon as={NavLink} to={routes.notes} activeClassName="active" icon={noteIcon} />
@@ -72,11 +76,11 @@ const Sidebar = ({ pageType }) => (
 );
 
 Sidebar.propTypes = {
-  pageType: PropTypes.oneOf(['notes', 'twitters', 'articles']),
+  pageContext: PropTypes.oneOf(['notes', 'twitters', 'articles']),
 };
 
 Sidebar.defaultProps = {
-  pageType: 'notes',
+  pageContext: 'notes',
 };
 
-export default Sidebar;
+export default withContext(Sidebar);
