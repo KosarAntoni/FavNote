@@ -7,8 +7,15 @@ import plusIcon from 'assets/plus.svg';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import withContext from 'hoc/withContext';
+import Masonry from 'react-masonry-css';
 import NewItemBar from 'components/organisms/NewItemBar/NewItemBar';
 import UserPageTemplate from './UserPageTemplate';
+
+const breakpointColumnsObj = {
+  default: 3,
+  768: 2,
+  480: 1,
+};
 
 const StyledWrapper = styled.div`
   position: relative;
@@ -23,20 +30,12 @@ const StyledWrapper = styled.div`
     }
 `;
 
-const StyledGrid = styled.div`
-  display: grid;
-  grid-template-columns: 1fr;
-  grid-gap: 2rem;
-  
-      @media screen and ${({ theme: { viewPorts } }) => viewPorts.viewport7} {
-        grid-template-columns: repeat(2, 1fr);
-        grid-gap: 3rem;
-       }
-       
-      @media screen and ${({ theme: { viewPorts } }) => viewPorts.viewport12} {
-        grid-template-columns: repeat(3, 1fr);
-        grid-gap: 5rem;
-      }
+const StyledGrid = styled(Masonry)`
+  display: flex;
+  margin-left: -3rem;
+  & > .masonry-grid_column {
+    margin-left: 3rem;
+  }
 `;
 
 const StyledPageHeader = styled.div`
@@ -108,7 +107,10 @@ class GridTemplate extends Component {
               {pageContext}
             </StyledParagraph>
           </StyledPageHeader>
-          <StyledGrid>
+          <StyledGrid
+            breakpointCols={breakpointColumnsObj}
+            columnClassName="masonry-grid_column"
+          >
             {children}
           </StyledGrid>
           <StyledPlusButton

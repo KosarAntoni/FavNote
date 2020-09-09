@@ -18,9 +18,11 @@ const StyledWrapper = styled.div`
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.01), 0 4px 8px rgba(0, 0, 0, 0.02), 0 1px 12px rgba(0, 0, 0, 0.12);  
   border-radius: 1rem;
   overflow: hidden;
-  min-height: 38rem;
+  min-height: 20rem;
   display: grid;
   grid-template-rows: 0.25fr 1fr;
+  
+  margin-bottom: 3rem;
 `;
 
 const InnerWrapper = styled.div`
