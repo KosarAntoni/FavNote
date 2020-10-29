@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Redirect } from 'react-router-dom';
-import styled, { css } from 'styled-components';
+import styled from 'styled-components';
 import Heading from 'components/atoms/Heading/Heading';
 import Paragraph from 'components/atoms/Paragraph/Paragraph';
 import Button from 'components/atoms/Button/Button';
@@ -11,6 +11,8 @@ import { removeItem as removeItemAction } from 'actions';
 import withContext from 'hoc/withContext';
 
 const StyledWrapper = styled.div`
+  padding: 1.5rem 3rem;
+
   border-width: 2px;
   border-style: solid;
   border-color: ${({ activeColor, theme }) => (activeColor ? theme[activeColor] : theme.white)};
@@ -18,47 +20,44 @@ const StyledWrapper = styled.div`
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.01), 0 4px 8px rgba(0, 0, 0, 0.02), 0 1px 12px rgba(0, 0, 0, 0.12);  
   border-radius: 1rem;
   overflow: hidden;
-  min-height: 20rem;
-  display: grid;
-  grid-template-rows: 0.25fr 1fr;
-  
-  margin-bottom: 3rem;
+  margin: 0 1rem 2rem;
+`;
+
+const HeadingWrapper = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
 `;
 
 const InnerWrapper = styled.div`
-  position: relative;
-  padding: 1.5rem 3rem;
-  
-  :first-of-type {
-    z-index: 2;
-  }
-  
-  ${({ flex }) => flex && css`
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-  `
-}`;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+`;
 
 const StyledHeading = styled(Heading)`
-  max-width: 80%;
-  margin: 1rem 0 0;
+  word-break: break-all;
+  margin: 0 1rem 0 0;
+  line-height: 3.6rem;
 `;
 
-const DateInfo = styled(Paragraph)`
-  font-weight: ${({ theme }) => theme.bold};
-  font-size: ${({ theme }) => theme.fontSize.xs};
-  margin: 0 0 1rem;
-`;
+// const DateInfo = styled(Paragraph)`
+//   font-weight: ${({ theme }) => theme.bold};
+//   font-size: ${({ theme }) => theme.fontSize.xs};
+//   margin: 0 0 1rem;
+// `;
 
 const StyledAvatar = styled.img`
-  position: absolute;
-  top: 2rem;
-  right: 2rem;
-  width: 6rem;
-  height: 6rem;
+  width: ${({ theme }) => theme.fontSize.xl};
+  height: ${({ theme }) => theme.fontSize.xl};
   border: 1px solid ${({ theme }) => theme.grey300};
   border-radius: 50%;
+`;
+
+const ButtonsWrapper = styled.div`
+  display: flex;
+  justify-content: space-between;
 `;
 
 const StyledLinkButton = styled.a`
@@ -67,15 +66,17 @@ const StyledLinkButton = styled.a`
   border-color: ${({ theme }) => (theme.grey300)};
   border-radius: 50%;
 
-  position: absolute;
-  top: 2rem;
-  right: 2rem;
   display: block;
-  width: 4rem;
-  height: 4rem;
+  flex-shrink: 0;
+  width: ${({ theme }) => theme.fontSize.xl};
+  height: ${({ theme }) => theme.fontSize.xl};
   background: ${({ theme }) => theme.white} url(${LinkIcon}) no-repeat;
   background-size: 60%;
   background-position: 50%;
+`;
+
+const StyledButton = styled(Button)`
+  width: 48%;
 `;
 
 class Card extends Component {
@@ -83,11 +84,13 @@ class Card extends Component {
     redirect: false,
   }
 
-  handleCardClick = () => this.setState({ redirect: true });
+  handleOpenClick = () => this.setState({ redirect: true });
 
   render() {
     const {
-      pageContext, title, created, content, twitterName, articleUrl, id, removeItem,
+      pageContext, title,
+      // created,
+      content, twitterName, articleUrl, id, removeItem,
     } = this.props;
 
     const { redirect } = this.state;
@@ -96,19 +99,32 @@ class Card extends Component {
       return <Redirect to={`${pageContext}/${id}`} />;
     }
     return (
-      <StyledWrapper activeColor={pageContext} onClick={this.handleCardClick}>
-        <InnerWrapper>
+      <StyledWrapper activeColor={pageContext}>
+        <HeadingWrapper>
           <StyledHeading>{title}</StyledHeading>
-          <DateInfo>{created}</DateInfo>
+          {/* <DateInfo>{created}</DateInfo> */}
           {pageContext === 'twitters'
           && <StyledAvatar src={`https://unavatar.now.sh/twitter/${twitterName}`} />}
           {pageContext === 'articles' && <StyledLinkButton href={articleUrl} />}
-        </InnerWrapper>
+        </HeadingWrapper>
         <InnerWrapper flex>
           <Paragraph>
             {content}
           </Paragraph>
-          <Button onClick={() => removeItem(pageContext, id)} secondary>Remove</Button>
+          <ButtonsWrapper>
+            <StyledButton
+              onClick={this.handleOpenClick}
+              secondary
+            >
+              Open
+            </StyledButton>
+            <StyledButton
+              onClick={() => removeItem(pageContext, id)}
+              secondary
+            >
+              Remove
+            </StyledButton>
+          </ButtonsWrapper>
         </InnerWrapper>
       </StyledWrapper>
     );
@@ -119,7 +135,6 @@ Card.propTypes = {
   pageContext: PropTypes.oneOf(['notes', 'twitters', 'articles']),
   id: PropTypes.string.isRequired,
   title: PropTypes.string.isRequired,
-  created: PropTypes.string.isRequired,
   twitterName: PropTypes.string,
   articleUrl: PropTypes.string,
   content: PropTypes.string.isRequired,

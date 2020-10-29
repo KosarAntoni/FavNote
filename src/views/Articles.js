@@ -1,34 +1,47 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Card from 'components/molecules/Card/Card';
 import GridTemplate from 'templates/GridTemplate';
 import PropTypes from 'prop-types';
+import { fetchItems as fetchItemsAction } from 'actions';
 
-const Articles = ({ articles }) => (
-  <GridTemplate>
-    {articles.map((item) => (
-      <Card
-        id={item.id}
-        title={item.title}
-        content={item.content}
-        created={item.created}
-        articleUrl={item.articleUrl}
-        key={item.title}
-      />
-    ))}
-  </GridTemplate>
-);
+class Articles extends Component {
+  componentDidMount() {
+    const { fetchArticles } = this.props;
+
+    fetchArticles();
+  }
+
+  render() {
+    const { articles } = this.props;
+    return (
+      <GridTemplate>
+        {articles.map(({
+          _id: id, title, content, articleUrl,
+        }) => (
+          <Card
+            id={id}
+            title={title}
+            content={content}
+            articleUrl={articleUrl}
+            key={title}
+          />
+        ))}
+      </GridTemplate>
+    );
+  }
+}
 
 Articles.propTypes = {
   articles: PropTypes.arrayOf(
     PropTypes.shape({
-      id: PropTypes.string.isRequired,
+      _id: PropTypes.string.isRequired,
       title: PropTypes.string.isRequired,
       content: PropTypes.string.isRequired,
-      created: PropTypes.string.isRequired,
       articleUrl: PropTypes.string.isRequired,
     }),
   ),
+  fetchArticles: PropTypes.func.isRequired,
 };
 
 Articles.defaultProps = {
@@ -37,4 +50,8 @@ Articles.defaultProps = {
 
 const mapStateToProps = ({ articles }) => ({ articles });
 
-export default connect(mapStateToProps)(Articles);
+const mapDispatchToProps = (dispatch) => ({
+  fetchArticles: () => dispatch(fetchItemsAction('articles')),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Articles);

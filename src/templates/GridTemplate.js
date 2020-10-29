@@ -5,15 +5,16 @@ import Paragraph from 'components/atoms/Paragraph/Paragraph';
 import ButtonIcon from 'components/atoms/ButtonIcon/ButtonIcon';
 import plusIcon from 'assets/plus.svg';
 import PropTypes from 'prop-types';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import withContext from 'hoc/withContext';
 import Masonry from 'react-masonry-css';
 import NewItemBar from 'components/organisms/NewItemBar/NewItemBar';
 import UserPageTemplate from './UserPageTemplate';
 
 const breakpointColumnsObj = {
-  default: 3,
-  768: 2,
+  default: 4,
+  2000: 3,
+  1200: 2,
   480: 1,
 };
 
@@ -22,7 +23,7 @@ const StyledWrapper = styled.div`
   padding: 0 1rem;
   
     @media screen and ${({ theme: { viewPorts } }) => viewPorts.viewport7} {
-      padding: 5rem 5rem 5rem 5rem;
+      padding: 4rem 4rem 4rem 4rem;
     }
   
     @media screen and ${({ theme: { viewPorts } }) => viewPorts.viewport9} {
@@ -32,10 +33,8 @@ const StyledWrapper = styled.div`
 
 const StyledGrid = styled(Masonry)`
   display: flex;
-  margin-left: -3rem;
-  & > .masonry-grid_column {
-    margin-left: 3rem;
-  }
+  width: calc(100% + 2rem);
+  margin: 0 -1rem;
 `;
 
 const StyledPageHeader = styled.div`
@@ -55,22 +54,45 @@ const StyledParagraph = styled(Paragraph)`
 
 const StyledPlusButton = styled(ButtonIcon)`
   position: fixed;
-  bottom: 9rem;
+  bottom: 3rem;
   right: 2rem;
   border-radius: 50%;
   background-color: ${({ activeColor, theme }) => (activeColor ? theme[activeColor] : theme.notes)};
   background-size: 30%;
-  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1), 0 4px 8px rgba(0, 0, 0, 0.08), 0 1px 12px rgba(0, 0, 0, 0.04);
   
   z-index: 110;
+      transition: all 0.3s;
+
+  ::after {
+    display: block;
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    top: 0;
+    left: 0;
+    
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1), 0 4px 8px rgba(0, 0, 0, 0.08), 0 1px 12px rgba(0, 0, 0, 0.04);
+    
+    transition: all 0.3s;
+  }
+  
   :focus {
     outline: none;
   }
   
   :hover {
       background-color: ${({ theme }) => theme.white};
-
   }
+    
+  ${({ isClose }) => isClose && css`
+    transform: rotate(45deg);
+    
+    ::after {
+        transform: rotate(-45deg);
+    }
+  `}  
     
     @media screen and ${({ theme: { viewPorts } }) => viewPorts.viewport7} {
       bottom: 2rem;
@@ -81,6 +103,8 @@ const StyledPlusButton = styled(ButtonIcon)`
 class GridTemplate extends Component {
   state = {
     isNewItemBarVisible: false,
+    searchBarValue: '',
+    filteredContent: '',
   }
 
   handleNewItemBarVisible = () => {
@@ -89,20 +113,46 @@ class GridTemplate extends Component {
     }));
   };
 
+  handleSearchBarInputChange = (val) => {
+    this.setState({
+      searchBarValue: val,
+    });
+  }
+
+  filterContent = () => {
+    const { searchBarValue } = this.state;
+    const { children } = this.props;
+
+    this.setState({
+      filteredContent: children.filter((item) => (
+        item.props.title.toUpperCase().includes(searchBarValue.toUpperCase())
+        || item.props.content.toUpperCase().includes(searchBarValue.toUpperCase())
+      )),
+    });
+  }
+
   render() {
     const { children, pageContext } = this.props;
-    const { isNewItemBarVisible } = this.state;
+    const { isNewItemBarVisible, searchBarValue, filteredContent } = this.state;
+    const content = filteredContent || children;
 
     return (
       <UserPageTemplate>
         <StyledWrapper>
           <StyledPageHeader>
-            <Input search placeholder="Search..." activecolor={pageContext} />
+            <Input
+              search
+              placeholder="Search..."
+              activecolor={pageContext}
+              value={searchBarValue}
+              onChange={({ target }) => this.handleSearchBarInputChange(target.value)}
+              onKeyUp={this.filterContent}
+            />
             <StyledHeading big>
               {pageContext}
             </StyledHeading>
             <StyledParagraph>
-              6
+              {content.length}
               {' '}
               {pageContext}
             </StyledParagraph>
@@ -111,12 +161,13 @@ class GridTemplate extends Component {
             breakpointCols={breakpointColumnsObj}
             columnClassName="masonry-grid_column"
           >
-            {children}
+            {content}
           </StyledGrid>
           <StyledPlusButton
             icon={plusIcon}
             activeColor={pageContext}
             onClick={this.handleNewItemBarVisible}
+            isClose={isNewItemBarVisible}
           />
           <NewItemBar handleClose={this.handleNewItemBarVisible} isVisible={isNewItemBarVisible} />
         </StyledWrapper>

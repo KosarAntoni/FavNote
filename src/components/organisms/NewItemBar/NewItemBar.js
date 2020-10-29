@@ -14,19 +14,29 @@ import {
 const StyledWrapper = styled.div`
   position: fixed;
   right: 0;
-  top: 0;
-  width: 50rem;
-  height: 100%;
+  bottom: 0;
+  width: 100%;
   z-index: 100;
   
   display: flex;
   flex-direction: column;
-  padding: 2rem;
+  padding: 2rem 2rem 3.3rem;
+  border-radius: 1rem 1rem 0 0;
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.01), 0 4px 8px rgba(0, 0, 0, 0.02), 0 1px 12px rgba(0, 0, 0, 0.12);
   background-color: ${({ theme }) => theme.white};
   
-  transform: translateX(${({ isVisible }) => (isVisible ? '0' : '110%')});
+  transform: translateY(${({ isVisible }) => (isVisible ? '0' : '110%')});
   transition: transform 0.3s;
+  
+      @media screen and ${({ theme: { viewPorts } }) => viewPorts.viewport7} {
+        right: 0;
+        top: 0;
+        width: 50rem;
+        height: 100%;
+        border-radius: 0;
+        padding: 2rem;
+        transform: translateX(${({ isVisible }) => (isVisible ? '0' : '110%')});
+    }
 `;
 
 const StyledForm = styled(Form)`

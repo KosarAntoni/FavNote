@@ -9,6 +9,8 @@ import twitterIcon from 'assets/twitter-brands.svg';
 import PropTypes from 'prop-types';
 import { routes } from 'routes';
 import withContext from 'hoc/withContext';
+import { connect } from 'react-redux';
+import { logout as logoutAction } from 'actions';
 
 const SidebarWraper = styled.div`
     z-index: 20;
@@ -18,26 +20,31 @@ const SidebarWraper = styled.div`
     align-items: center;
     justify-content: center;
 
-    left: 0;
-    bottom: 0;
-    width: 100%;
-    height: 8rem;
+    left: 50%;
+    bottom: 2rem;
+    padding: 0.7rem;
+
+    transform: translateX(-50%);
     
-    border-radius: 1rem 1rem 0 0;
+    border-radius: 1rem;
     box-shadow: 0 1px 4px rgba(0, 0, 0, 0.01), 0 4px 8px rgba(0, 0, 0, 0.02), 0 1px 12px rgba(0, 0, 0, 0.12);
     background-color: ${({ theme, activeColor }) => (activeColor ? theme[activeColor] : theme.note)};
+    
+    transition: all 0.5s;
 
-    @media screen and ${({ theme: { viewPorts } }) => viewPorts.viewport7} {
+    @media screen and ${({ theme: { viewPorts } }) => viewPorts.viewport7} { 
       top: 2rem;
       left: 2rem;
       bottom: auto;
+      transform: translateX(0);
+      padding: 1.5rem 1rem;
+
       flex-direction: column;
       align-items: center;
       width: 10rem;
       height: auto;
-      padding: 1rem;
       border-radius: 1rem;
-      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.16), 0 2px 4px rgba(0, 0, 0, 0.12), 0 1px 8px rgba(0, 0, 0, 0.1);    
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.16), 0 2px 4px rgba(0, 0, 0, 0.12), 0 1px 8px rgba(0, 0, 0, 0.1);
     }
 `;
 
@@ -51,6 +58,7 @@ const LogOutButton = styled(ButtonIcon)`
 const ButtonsWrapper = styled.ul`
     list-style: none;
     padding: 0;
+    margin: 0;
     display: flex;
   
       @media screen and ${({ theme: { viewPorts } }) => viewPorts.viewport7} {
@@ -58,7 +66,7 @@ const ButtonsWrapper = styled.ul`
       }
 `;
 
-const Sidebar = ({ pageContext }) => (
+const Sidebar = ({ pageContext, logout }) => (
   <SidebarWraper activeColor={pageContext}>
     <ButtonsWrapper>
       <li>
@@ -71,16 +79,25 @@ const Sidebar = ({ pageContext }) => (
         <ButtonIcon as={NavLink} to={routes.articles} activeClassName="active" icon={penIcon} />
       </li>
     </ButtonsWrapper>
-    <LogOutButton as={Link} to="/" icon={logoutIcon} />
+    <LogOutButton
+      as={Link}
+      to={routes.login}
+      onClick={logout}
+      icon={logoutIcon}
+    />
   </SidebarWraper>
 );
-
 Sidebar.propTypes = {
   pageContext: PropTypes.oneOf(['notes', 'twitters', 'articles']),
+  logout: PropTypes.func.isRequired,
 };
 
 Sidebar.defaultProps = {
   pageContext: 'notes',
 };
 
-export default withContext(Sidebar);
+const mapDispatchToProps = (dispatch) => ({
+  logout: () => dispatch(logoutAction()),
+});
+
+export default connect(null, mapDispatchToProps)(withContext(Sidebar));

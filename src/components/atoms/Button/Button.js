@@ -10,7 +10,7 @@ const Button = styled.button`
   border-color: ${({ theme, activecolor }) => (activecolor ? theme[activecolor] : theme.notes)} ;
   background-color: ${({ theme, activecolor }) => (activecolor ? theme[activecolor] : theme.notes)} ;
 
-  width: 12rem;
+  width: 14rem;
   height: 4rem;
   border-radius: 0.5rem;
   font-weight: 600;
@@ -20,10 +20,8 @@ const Button = styled.button`
   
   transition: all 0.3s;
   cursor: pointer;
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.16), 0 2px 4px rgba(0, 0, 0, 0.12), 0 1px 8px rgba(0, 0, 0, 0.1);
   
   :hover {
-    border-color: ${({ theme }) => (theme.white)} ;
     background-color: ${({ theme }) => (theme.white)} ;
   }
   

@@ -23,7 +23,7 @@ class MainTemplate extends Component {
     const pageTypes = ['notes', 'twitters', 'articles'];
     const { location: { pathname } } = this.props;
 
-    const [currentPage] = pageTypes.filter(((page) => pathname.includes(page)));
+    const [currentPage] = pageTypes.filter((page) => pathname.includes(page));
 
     if (prevState.pageType !== currentPage) {
       this.setState({ pageType: currentPage });
