@@ -13,11 +13,12 @@ class Articles extends Component {
   }
 
   render() {
-    const { articles } = this.props;
+    const { articles, isLoading } = this.props;
     return (
-      <GridTemplate>
+
+      <GridTemplate isLoading={isLoading}>
         {articles.map(({
-          _id: id, title, content, articleUrl,
+          id, title, content, articleUrl,
         }) => (
           <Card
             id={id}
@@ -28,14 +29,16 @@ class Articles extends Component {
           />
         ))}
       </GridTemplate>
+
     );
   }
 }
 
 Articles.propTypes = {
+  isLoading: PropTypes.bool,
   articles: PropTypes.arrayOf(
     PropTypes.shape({
-      _id: PropTypes.string.isRequired,
+      id: PropTypes.number.isRequired,
       title: PropTypes.string.isRequired,
       content: PropTypes.string.isRequired,
       articleUrl: PropTypes.string.isRequired,
@@ -46,9 +49,10 @@ Articles.propTypes = {
 
 Articles.defaultProps = {
   articles: [],
+  isLoading: false,
 };
 
-const mapStateToProps = ({ articles }) => ({ articles });
+const mapStateToProps = ({ articles, isLoading }) => ({ articles, isLoading });
 
 const mapDispatchToProps = (dispatch) => ({
   fetchArticles: () => dispatch(fetchItemsAction('articles')),

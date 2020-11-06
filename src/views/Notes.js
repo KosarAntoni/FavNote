@@ -13,11 +13,11 @@ class Notes extends Component {
   }
 
   render() {
-    const { notes } = this.props;
+    const { notes, isLoading } = this.props;
     return (
-      <GridTemplate>
+      <GridTemplate isLoading={isLoading}>
         {notes.map(({
-          _id: id, title, content,
+          id, title, content,
         }) => (
           <Card
             id={id}
@@ -27,14 +27,16 @@ class Notes extends Component {
           />
         ))}
       </GridTemplate>
+
     );
   }
 }
 
 Notes.propTypes = {
+  isLoading: PropTypes.bool,
   notes: PropTypes.arrayOf(
     PropTypes.shape({
-      _id: PropTypes.string.isRequired,
+      id: PropTypes.number.isRequired,
       title: PropTypes.string.isRequired,
       content: PropTypes.string.isRequired,
     }),
@@ -43,10 +45,11 @@ Notes.propTypes = {
 };
 
 Notes.defaultProps = {
+  isLoading: false,
   notes: [],
 };
 
-const mapStateToProps = ({ notes }) => ({ notes });
+const mapStateToProps = ({ notes, isLoading }) => ({ notes, isLoading });
 
 const mapDispatchToProps = (dispatch) => ({
   fetchNotes: () => dispatch(fetchItemsAction('notes')),

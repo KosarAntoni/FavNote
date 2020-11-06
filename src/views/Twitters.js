@@ -13,12 +13,12 @@ class Twitters extends Component {
   }
 
   render() {
-    const { twitters } = this.props;
+    const { twitters, isLoading } = this.props;
 
     return (
-      <GridTemplate>
+      <GridTemplate isLoading={isLoading}>
         {twitters.map(({
-          _id: id, title, content, twitterName,
+          id, title, content, twitterName,
         }) => (
           <Card
             id={id}
@@ -34,9 +34,10 @@ class Twitters extends Component {
 }
 
 Twitters.propTypes = {
+  isLoading: PropTypes.bool,
   twitters: PropTypes.arrayOf(
     PropTypes.shape({
-      _id: PropTypes.string.isRequired,
+      id: PropTypes.number.isRequired,
       title: PropTypes.string.isRequired,
       content: PropTypes.string.isRequired,
       twitterName: PropTypes.string.isRequired,
@@ -46,12 +47,11 @@ Twitters.propTypes = {
 };
 
 Twitters.defaultProps = {
+  isLoading: false,
   twitters: [],
 };
 
-const mapStateToProps = ({ twitters }) => ({
-  twitters,
-});
+const mapStateToProps = ({ twitters, isLoading }) => ({ twitters, isLoading });
 
 const mapDispatchToProps = (dispatch) => ({
   fetchTwitters: () => dispatch(fetchItemsAction('twitters')),

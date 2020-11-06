@@ -16,9 +16,10 @@ const StyledWrapper = styled.div`
   border-width: 2px;
   border-style: solid;
   border-color: ${({ activeColor, theme }) => (activeColor ? theme[activeColor] : theme.white)};
-
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.01), 0 4px 8px rgba(0, 0, 0, 0.02), 0 1px 12px rgba(0, 0, 0, 0.12);  
   border-radius: 1rem;
+
+  background-color:#fff;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.01), 0 4px 8px rgba(0, 0, 0, 0.02), 0 1px 12px rgba(0, 0, 0, 0.12);  
   overflow: hidden;
   margin: 0 1rem 2rem;
 `;
@@ -133,7 +134,7 @@ class Card extends Component {
 
 Card.propTypes = {
   pageContext: PropTypes.oneOf(['notes', 'twitters', 'articles']),
-  id: PropTypes.string.isRequired,
+  id: PropTypes.number.isRequired,
   title: PropTypes.string.isRequired,
   twitterName: PropTypes.string,
   articleUrl: PropTypes.string,

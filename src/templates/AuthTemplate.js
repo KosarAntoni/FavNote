@@ -9,6 +9,7 @@ import { routes } from 'routes';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { authenticate as authenticateAction } from 'actions';
+import Loader from 'components/atoms/Loader/Loader';
 
 const StyledWrapper = styled.div`
   position: fixed;
@@ -90,71 +91,75 @@ class AuthTemplate extends Component {
 
   render() {
     const { pageType } = this.state;
-    const { authenticate, userID } = this.props;
+    const { authenticate, userID, isLoading } = this.props;
     if (userID) { return (<Redirect to={routes.home} />); }
 
     return (
       <StyledWrapper>
         <StyledHeading>Your new favorite online notes experience</StyledHeading>
         <StyledAuthCard>
-          <Formik
-            initialValues={{ username: '', password: '' }}
-            onSubmit={({ username, password }) => {
-              authenticate(username, password);
-            }}
-          >
-            {({ handleChange, handleBlur, values }) => (
-              <>
-                {pageType === 'login' && <Heading>Sign in</Heading>}
-                {pageType === 'register' && <Heading>Register</Heading>}
-                <StyledForm>
-                  <StyledInput
-                    type="text"
-                    name="username"
-                    placeholder="Login"
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                    value={values.title}
-                  />
-                  <StyledInput
-                    type="password"
-                    name="password"
-                    placeholder="Password"
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                    value={values.title}
-                  />
-                  {pageType === 'login' && (
-                  <Button activecolor="notes" type="submit">
-                    sign in
-                  </Button>
-                  )}
-                  {pageType === 'register' && (
-                  <Button activecolor="notes" type="submit">
-                    register
-                  </Button>
-                  )}
-                </StyledForm>
-                {pageType === 'login' && <StyledLink to={routes.register}>I want create account!</StyledLink>}
-                {pageType === 'register' && <StyledLink to={routes.login}>I want log in!</StyledLink>}
-              </>
+          {isLoading ? <Loader />
+            : (
+              <Formik
+                initialValues={{ username: '', password: '' }}
+                onSubmit={({ username, password }) => {
+                  authenticate(username, password);
+                }}
+              >
+                {({ handleChange, handleBlur, values }) => (
+                  <>
+                    {pageType === 'login' && <Heading>Sign in</Heading>}
+                    {pageType === 'register' && <Heading>Register</Heading>}
+                    <StyledForm>
+                      <StyledInput
+                        type="text"
+                        name="username"
+                        placeholder="Login"
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        value={values.title}
+                      />
+                      <StyledInput
+                        type="password"
+                        name="password"
+                        placeholder="Password"
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        value={values.title}
+                      />
+                      {pageType === 'login' && (
+                      <Button activecolor="notes" type="submit">
+                        sign in
+                      </Button>
+                      )}
+                      {pageType === 'register' && (
+                      <Button activecolor="notes" type="submit">
+                        register
+                      </Button>
+                      )}
+                    </StyledForm>
+                    {pageType === 'login'
+                  && <StyledLink to={routes.register}>I want create account!</StyledLink>}
+                    {pageType === 'register'
+                  && <StyledLink to={routes.login}>I want log in!</StyledLink>}
+                  </>
+                )}
+              </Formik>
             )}
-          </Formik>
         </StyledAuthCard>
       </StyledWrapper>
     );
   }
 }
 
-const mapStateToProps = ({ userID = null }) => ({
-  userID,
-});
+const mapStateToProps = ({ userID = null, isLoading }) => ({ userID, isLoading });
 
 const mapDispatchToProps = (dispatch) => ({
   authenticate: (username, password) => dispatch(authenticateAction(username, password)),
 });
 
 AuthTemplate.propTypes = {
+  isLoading: PropTypes.bool,
   authenticate: PropTypes.func.isRequired,
   userID: PropTypes.string,
   location: PropTypes.shape({
@@ -163,6 +168,7 @@ AuthTemplate.propTypes = {
 };
 
 AuthTemplate.defaultProps = {
+  isLoading: false,
   userID: null,
 };
 

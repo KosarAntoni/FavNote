@@ -9,6 +9,7 @@ import styled, { css } from 'styled-components';
 import withContext from 'hoc/withContext';
 import Masonry from 'react-masonry-css';
 import NewItemBar from 'components/organisms/NewItemBar/NewItemBar';
+import Loader from 'components/atoms/Loader/Loader';
 import UserPageTemplate from './UserPageTemplate';
 
 const breakpointColumnsObj = {
@@ -100,6 +101,10 @@ const StyledPlusButton = styled(ButtonIcon)`
     }
 `;
 
+const StyledLoader = styled(Loader)`
+  margin: auto;
+`;
+
 class GridTemplate extends Component {
   state = {
     isNewItemBarVisible: false,
@@ -132,7 +137,7 @@ class GridTemplate extends Component {
   }
 
   render() {
-    const { children, pageContext } = this.props;
+    const { children, pageContext, isLoading } = this.props;
     const { isNewItemBarVisible, searchBarValue, filteredContent } = this.state;
     const content = filteredContent || children;
 
@@ -157,12 +162,17 @@ class GridTemplate extends Component {
               {pageContext}
             </StyledParagraph>
           </StyledPageHeader>
-          <StyledGrid
-            breakpointCols={breakpointColumnsObj}
-            columnClassName="masonry-grid_column"
-          >
-            {content}
-          </StyledGrid>
+          {isLoading
+            ? <StyledLoader />
+            : (
+              <StyledGrid
+                breakpointCols={breakpointColumnsObj}
+                columnClassName="masonry-grid_column"
+              >
+                {content}
+              </StyledGrid>
+            )}
+
           <StyledPlusButton
             icon={plusIcon}
             activeColor={pageContext}
@@ -177,11 +187,13 @@ class GridTemplate extends Component {
 }
 
 GridTemplate.propTypes = {
+  isLoading: PropTypes.bool,
   children: PropTypes.arrayOf(PropTypes.object).isRequired,
   pageContext: PropTypes.oneOf(['notes', 'twitters', 'articles']),
 };
 
 GridTemplate.defaultProps = {
+  isLoading: false,
   pageContext: 'notes',
 };
 export default withContext(GridTemplate);

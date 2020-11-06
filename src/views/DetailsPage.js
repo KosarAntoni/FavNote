@@ -16,18 +16,12 @@ class DetailsPage extends Component {
   };
 
   componentDidMount() {
-    const { activeItem, match } = this.props;
-    console.log(match);
+    const { match } = this.props;
 
-    if (activeItem) {
-      this.setState({ activeItem });
-    } else {
-      const { id } = match.params;
+    const { id } = match.params;
 
-      axios.get(`http://localhost:9000/api/note/${id}`)
-        .then(({ data }) => this.setState({ activeItem: data }))
-        .catch((err) => console.log(err));
-    }
+    axios.get(`http://localhost:1337/notes/${id}`)
+      .then(({ data }) => this.setState({ activeItem: data }));
   }
 
   render() {
@@ -50,24 +44,7 @@ class DetailsPage extends Component {
 }
 
 DetailsPage.propTypes = {
-  activeItem: PropTypes.shape({
-    id: PropTypes.string,
-    title: PropTypes.string,
-    content: PropTypes.string,
-    articleUrl: PropTypes.string,
-    twitterName: PropTypes.string,
-  }).isRequired,
   match: PropTypes.shape().isRequired,
 };
 
-const mapStateToProps = (state, ownProps) => {
-  if (state[ownProps.pageContext]) {
-    return {
-      activeItem: state[ownProps.pageContext].filter((item) => (
-        item.id === ownProps.match.params.id))[0],
-    };
-  }
-  return null;
-};
-
-export default withContext(connect(mapStateToProps)(DetailsPage));
+export default withContext(connect(null)(DetailsPage));
