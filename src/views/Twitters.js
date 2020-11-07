@@ -19,8 +19,9 @@ class Twitters extends Component {
       <GridTemplate isLoading={isLoading}>
         {twitters.map(({
           id, title, content, twitterName,
-        }) => (
+        }, i) => (
           <Card
+            animationDelay={i * 0.15}
             id={id}
             title={title}
             content={content}

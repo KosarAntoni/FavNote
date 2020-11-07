@@ -9,8 +9,9 @@ import LinkIcon from 'assets/link.svg';
 import { connect } from 'react-redux';
 import { removeItem as removeItemAction } from 'actions';
 import withContext from 'hoc/withContext';
+import { motion } from 'framer-motion';
 
-const StyledWrapper = styled.div`
+const StyledWrapper = styled(motion.div)`
   padding: 1.5rem 3rem;
 
   border-width: 2px;
@@ -89,7 +90,9 @@ class Card extends Component {
 
   render() {
     const {
-      pageContext, title,
+      animationDelay,
+      pageContext,
+      title,
       // created,
       content, twitterName, articleUrl, id, removeItem,
     } = this.props;
@@ -100,7 +103,17 @@ class Card extends Component {
       return <Redirect to={`${pageContext}/${id}`} />;
     }
     return (
-      <StyledWrapper activeColor={pageContext}>
+      <StyledWrapper
+        activeColor={pageContext}
+        animate={{
+          opacity: [0, 1],
+          y: [20, -5, 0],
+        }}
+        transition={{
+          duration: 0.3,
+          delay: animationDelay,
+        }}
+      >
         <HeadingWrapper>
           <StyledHeading>{title}</StyledHeading>
           {/* <DateInfo>{created}</DateInfo> */}
@@ -133,6 +146,7 @@ class Card extends Component {
 }
 
 Card.propTypes = {
+  animationDelay: PropTypes.number,
   pageContext: PropTypes.oneOf(['notes', 'twitters', 'articles']),
   id: PropTypes.number.isRequired,
   title: PropTypes.string.isRequired,
@@ -143,6 +157,7 @@ Card.propTypes = {
 };
 
 Card.defaultProps = {
+  animationDelay: 0,
   pageContext: 'notes',
   twitterName: null,
   articleUrl: null,

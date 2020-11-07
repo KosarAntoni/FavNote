@@ -10,6 +10,7 @@ import withContext from 'hoc/withContext';
 import Masonry from 'react-masonry-css';
 import NewItemBar from 'components/organisms/NewItemBar/NewItemBar';
 import Loader from 'components/atoms/Loader/Loader';
+import { motion } from 'framer-motion';
 import UserPageTemplate from './UserPageTemplate';
 
 const breakpointColumnsObj = {
@@ -42,16 +43,16 @@ const StyledPageHeader = styled.div`
   margin: 2rem 0 5rem;
 `;
 
-const StyledHeading = styled(Heading)`
+const StyledHeading = motion.custom(styled(Heading)`
   margin: 2.5rem 0 0 0;
   text-transform: capitalize;
-`;
+`);
 
-const StyledParagraph = styled(Paragraph)`
+const StyledParagraph = motion.custom(styled(Paragraph)`
   margin: 0;
   font-weight: ${({ theme }) => theme.bold};
 
-`;
+`);
 
 const StyledPlusButton = styled(ButtonIcon)`
   position: fixed;
@@ -142,7 +143,7 @@ class GridTemplate extends Component {
     const content = filteredContent || children;
 
     return (
-      <UserPageTemplate>
+      <UserPageTemplate keyInfo={pageContext}>
         <StyledWrapper>
           <StyledPageHeader>
             <Input
@@ -153,10 +154,28 @@ class GridTemplate extends Component {
               onChange={({ target }) => this.handleSearchBarInputChange(target.value)}
               onKeyUp={this.filterContent}
             />
-            <StyledHeading big>
+            <StyledHeading
+              big
+              animate={{
+                opacity: [0, 1],
+                y: [10, -5, 0],
+              }}
+              transition={{
+                duration: 0.3,
+              }}
+            >
               {pageContext}
             </StyledHeading>
-            <StyledParagraph>
+            <StyledParagraph
+              animate={{
+                opacity: [0, 1],
+                y: [5, -2, 0],
+              }}
+              transition={{
+                duration: 0.3,
+                delay: 0.15,
+              }}
+            >
               {content.length}
               {' '}
               {pageContext}

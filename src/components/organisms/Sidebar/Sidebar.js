@@ -11,8 +11,10 @@ import { routes } from 'routes';
 import withContext from 'hoc/withContext';
 import { connect } from 'react-redux';
 import { logout as logoutAction } from 'actions';
+import { motion } from 'framer-motion';
+import { theme } from 'theme/mainTheme';
 
-const SidebarWraper = styled.div`
+const SidebarWraper = styled(motion.div)`
     z-index: 20;
 
     position: fixed;
@@ -28,10 +30,8 @@ const SidebarWraper = styled.div`
     
     border-radius: 1rem;
     box-shadow: 0 1px 4px rgba(0, 0, 0, 0.01), 0 4px 8px rgba(0, 0, 0, 0.02), 0 1px 12px rgba(0, 0, 0, 0.12);
-    background-color: ${({ theme, activeColor }) => (activeColor ? theme[activeColor] : theme.note)};
+    background-color: ${({ activeColor }) => (activeColor ? theme[activeColor] : theme.note)};
     
-    transition: all 0.5s;
-
     @media screen and ${({ theme: { viewPorts } }) => viewPorts.viewport7} { 
       top: 2rem;
       left: 2rem;
@@ -67,7 +67,11 @@ const ButtonsWrapper = styled.ul`
 `;
 
 const Sidebar = ({ pageContext, logout }) => (
-  <SidebarWraper activeColor={pageContext}>
+  <SidebarWraper
+    activeColor={pageContext}
+    animate={{ backgroundColor: theme[pageContext] }}
+    transition={{ duration: 0.3 }}
+  >
     <ButtonsWrapper>
       <li>
         <ButtonIcon as={NavLink} to={routes.notes} activeClassName="active" icon={noteIcon} />

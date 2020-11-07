@@ -9,6 +9,7 @@ import Button from 'components/atoms/Button/Button';
 import withContext from 'hoc/withContext';
 import { connect } from 'react-redux';
 import { removeItem as removeItemAction } from 'actions';
+import Loader from 'components/atoms/Loader/Loader';
 
 const StyledWrapper = styled.div`
   padding: 1.5rem 3rem;
@@ -89,40 +90,48 @@ const StyledButton = styled(Button)`
   text-decoration: none;
 `;
 
+const StyledLoader = styled(Loader)`
+  margin: 40% auto;
+`;
+
 const DetailsTemplate = ({
   id, pageContext, title, created, content, articleUrl, twitterName, removeItem,
 }) => (
-  <UserPageTemplate>
-    <StyledWrapper activecolor={pageContext}>
-      {pageContext === 'twitters' && (
-      <StyledImage alt={title} src={`https://unavatar.now.sh/twitter/${twitterName}`} />
+  <UserPageTemplate keyInfo="DetailsTemplate">
+    {!title ? <StyledLoader />
+      : (
+        <StyledWrapper activecolor={pageContext}>
+          {pageContext === 'twitters' && (
+          <StyledImage alt={title} src={`https://unavatar.now.sh/twitter/${twitterName}`} />
+          )}
+          <StyledPageHeader>
+            <StyledHeading big as="h1">
+              {title}
+            </StyledHeading>
+            <StyledParagraph>{created}</StyledParagraph>
+          </StyledPageHeader>
+          <Paragraph>{content}</Paragraph>
+          {pageContext === 'articles' && <StyledLink href={articleUrl}>Open article</StyledLink>}
+          <ButtonsWrapper>
+            <StyledButton
+              as={Link}
+              to={`/${pageContext}`}
+              activecolor={pageContext}
+            >
+              close
+            </StyledButton>
+            <StyledButton
+              as={Link}
+              to={`/${pageContext}`}
+              onClick={() => removeItem(pageContext, id)}
+              activecolor={pageContext}
+            >
+              Remove
+            </StyledButton>
+          </ButtonsWrapper>
+        </StyledWrapper>
       )}
-      <StyledPageHeader>
-        <StyledHeading big as="h1">
-          {title}
-        </StyledHeading>
-        <StyledParagraph>{created}</StyledParagraph>
-      </StyledPageHeader>
-      <Paragraph>{content}</Paragraph>
-      {pageContext === 'articles' && <StyledLink href={articleUrl}>Open article</StyledLink>}
-      <ButtonsWrapper>
-        <StyledButton
-          as={Link}
-          to={`/${pageContext}`}
-          activecolor={pageContext}
-        >
-          close
-        </StyledButton>
-        <StyledButton
-          as={Link}
-          to={`/${pageContext}`}
-          onClick={() => removeItem(pageContext, id)}
-          activecolor={pageContext}
-        >
-          Remove
-        </StyledButton>
-      </ButtonsWrapper>
-    </StyledWrapper>
+
   </UserPageTemplate>
 );
 
@@ -133,7 +142,10 @@ DetailsTemplate.propTypes = {
   content: PropTypes.string,
   articleUrl: PropTypes.string,
   twitterName: PropTypes.string,
-  id: PropTypes.string,
+  id: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.number,
+  ]),
   removeItem: PropTypes.func.isRequired,
 };
 

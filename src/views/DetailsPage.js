@@ -17,17 +17,18 @@ class DetailsPage extends Component {
 
   componentDidMount() {
     const { match } = this.props;
-
     const { id } = match.params;
 
     axios.get(`http://localhost:1337/notes/${id}`)
-      .then(({ data }) => this.setState({ activeItem: data }));
+      .then(({ data }) => this.setState({
+        activeItem: data,
+      }));
   }
 
   render() {
     const {
       activeItem: {
-        _id: id, title, content, articleUrl, twitterName,
+        id, title, content, articleUrl, twitterName,
       },
     } = this.state;
 

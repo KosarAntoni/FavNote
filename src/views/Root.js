@@ -18,18 +18,26 @@ const Root = () => (
   <Provider store={store}>
     <PersistGate loading={null} persistor={persistor}>
       <BrowserRouter>
-        <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;500;600&display=swap" rel="stylesheet" />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;500;600&display=swap"
+          rel="stylesheet"
+        />
         <MainTemplate>
           <Switch>
-            <Route exact path={routes.login} component={LoginPage} />
-            <Route exact path={routes.register} component={RegisterPage} />
-            <Route exact path={routes.home} render={() => <Redirect to={routes.notes} />} />
-            <Route exact path={routes.notes} component={Notes} />
-            <Route path={routes.note} component={DetailsPage} />
-            <Route exact path={routes.twitters} component={Twitters} />
-            <Route path={routes.twitter} component={DetailsPage} />
-            <Route exact path={routes.articles} component={Articles} />
-            <Route path={routes.article} component={DetailsPage} />
+            <Route key={routes.login} exact path={routes.login} component={LoginPage} />
+            <Route key={routes.register} exact path={routes.register} component={RegisterPage} />
+            <Route
+              key={routes.home}
+              exact
+              path={routes.home}
+              render={() => <Redirect to={routes.notes} />}
+            />
+            <Route key={routes.notes} exact path={routes.notes} component={Notes} />
+            <Route key={routes.note} path={routes.note} component={DetailsPage} />
+            <Route key={routes.twitters} exact path={routes.twitters} component={Twitters} />
+            <Route key={routes.twitter} path={routes.twitter} component={DetailsPage} />
+            <Route key={routes.articles} exact path={routes.articles} component={Articles} />
+            <Route key={routes.article} path={routes.article} component={DetailsPage} />
           </Switch>
         </MainTemplate>
       </BrowserRouter>

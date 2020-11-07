@@ -15,12 +15,12 @@ class Articles extends Component {
   render() {
     const { articles, isLoading } = this.props;
     return (
-
       <GridTemplate isLoading={isLoading}>
         {articles.map(({
           id, title, content, articleUrl,
-        }) => (
+        }, i) => (
           <Card
+            animationDelay={i * 0.15}
             id={id}
             title={title}
             content={content}
@@ -29,7 +29,6 @@ class Articles extends Component {
           />
         ))}
       </GridTemplate>
-
     );
   }
 }

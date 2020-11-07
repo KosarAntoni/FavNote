@@ -18,16 +18,16 @@ class Notes extends Component {
       <GridTemplate isLoading={isLoading}>
         {notes.map(({
           id, title, content,
-        }) => (
+        }, i) => (
           <Card
+            animationDelay={i * 0.15}
             id={id}
             title={title}
             content={content}
-            key={id}
+            key={title}
           />
         ))}
       </GridTemplate>
-
     );
   }
 }
