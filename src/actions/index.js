@@ -15,6 +15,22 @@ export const authenticate = (identifier, password) => (dispatch) => {
     });
 };
 
+export const register = (username, email, password) => (dispatch) => {
+  dispatch({ type: 'REGISTRATION_REQUEST' });
+
+  return axios
+    .post('http://localhost:1337/auth/local/register', {
+      username,
+      email,
+      password,
+    }).then((payload) => {
+      dispatch({ type: 'REGISTRATION_SUCCESS', payload });
+    })
+    .catch(() => {
+      dispatch({ type: 'REGISTRATION_FAILURE' });
+    });
+};
+
 export const logout = () => (dispatch) => {
   dispatch({ type: 'LOGOUT' });
 };

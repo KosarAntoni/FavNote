@@ -63,7 +63,7 @@ const StyledPlusButton = styled(ButtonIcon)`
   background-size: 30%;
   
   z-index: 110;
-      transition: all 0.3s;
+  transition: all 0.3s;
 
   ::after {
     display: block;
@@ -215,4 +215,5 @@ GridTemplate.defaultProps = {
   isLoading: false,
   pageContext: 'notes',
 };
+
 export default withContext(GridTemplate);

@@ -41,6 +41,22 @@ const rootReducer = (state = initialState, action) => {
         ...state,
         isLoading: false,
       };
+    case ('REGISTRATION_REQUEST'):
+      return {
+        ...state,
+        isLoading: true,
+      };
+    case ('REGISTRATION_SUCCESS'):
+      return {
+        ...state,
+        isLoading: false,
+        userID: action.payload.data.jwt,
+      };
+    case ('REGISTRATION_FAILURE'):
+      return {
+        ...state,
+        isLoading: false,
+      };
     case ('ADD_ITEM_SUCCESS'):
       return {
         ...state,

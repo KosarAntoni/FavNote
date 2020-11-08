@@ -1,15 +1,12 @@
-import React, { Component } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import Heading from 'components/atoms/Heading/Heading';
-import { Form, Formik } from 'formik';
-import Input from 'components/atoms/Input/Input';
-import { Link, Redirect, withRouter } from 'react-router-dom';
-import Button from 'components/atoms/Button/Button';
+import { Redirect } from 'react-router-dom';
 import { routes } from 'routes';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
-import { authenticate as authenticateAction } from 'actions';
 import Loader from 'components/atoms/Loader/Loader';
+import { connect } from 'react-redux';
+import { motion, AnimatePresence } from 'framer-motion';
 
 const StyledWrapper = styled.div`
   position: fixed;
@@ -24,14 +21,14 @@ const StyledWrapper = styled.div`
   justify-content: center;
 `;
 
-const StyledAuthCard = styled.div`
+const StyledAuthCard = styled(motion.div)`
   width: 90%;
   max-width: 40rem;
   height: 40rem;
   
   background-color: white;
   border-radius: 1rem;
-  box-shadow: 0 10px 20px -10px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 1px 4px rgba(0,0,0,0.01), 0 4px 8px rgba(0,0,0,0.02), 0 1px 12px rgba(0,0,0,0.12);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -43,133 +40,58 @@ const StyledHeading = styled(Heading)`
   text-align: center;
 `;
 
-const StyledForm = styled(Form)`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-  width: 80%;
-`;
+const AuthTemplate = ({
+  userID, isLoading, children, keyInfo,
+}) => {
+  if (userID) { return (<Redirect to={routes.home} />); }
 
-const StyledInput = styled(Input)`
-  margin: 0 0 3rem 0;
-  height: 4rem;
-  width: 100%;
-`;
-
-const StyledLink = styled(Link)`
-  display: block;
-  font-weight: ${({ theme }) => theme.bold};
-  font-size: ${({ theme }) => theme.fontSize.xs};
-  color: black;
-  text-transform: uppercase;
-  margin: 20px 0 50px;
-`;
-
-class AuthTemplate extends Component {
-  state = {
-    pageType: 'login',
-  }
-
-  componentDidMount() {
-    this.setCurrentPage();
-  }
-
-  componentDidUpdate(prevProps, prevState) {
-    this.setCurrentPage(prevState);
-  }
-
-  setCurrentPage = (prevState = '') => {
-    const pageTypes = ['login', 'register'];
-    const { location: { pathname } } = this.props;
-    const [currentPage] = pageTypes.filter((page) => pathname.includes(page));
-
-    if (prevState.pageType !== currentPage) {
-      this.setState({ pageType: currentPage });
-    }
-  }
-
-  render() {
-    const { pageType } = this.state;
-    const { authenticate, userID, isLoading } = this.props;
-    if (userID) { return (<Redirect to={routes.home} />); }
-
-    return (
-      <StyledWrapper>
-        <StyledHeading>Your new favorite online notes experience</StyledHeading>
-        <StyledAuthCard>
+  return (
+    <StyledWrapper>
+      <StyledHeading>Your new favorite online notes experience</StyledHeading>
+      <AnimatePresence exitBeforeEnter>
+        <StyledAuthCard
+          initial={{
+            opacity: 0,
+            scale: 0.9,
+            y: 10,
+          }}
+          animate={{
+            opacity: 1,
+            scale: 1,
+            y: 0,
+          }}
+          key={keyInfo}
+          exit={{
+            opacity: 0,
+            scale: 0.9,
+            y: 10,
+            transition: { duration: 0.15 },
+          }}
+          transition={{
+            duration: 0.3,
+          }}
+        >
           {isLoading ? <Loader />
-            : (
-              <Formik
-                initialValues={{ username: '', password: '' }}
-                onSubmit={({ username, password }) => {
-                  authenticate(username, password);
-                }}
-              >
-                {({ handleChange, handleBlur, values }) => (
-                  <>
-                    {pageType === 'login' && <Heading>Sign in</Heading>}
-                    {pageType === 'register' && <Heading>Register</Heading>}
-                    <StyledForm>
-                      <StyledInput
-                        type="text"
-                        name="username"
-                        placeholder="Login"
-                        onChange={handleChange}
-                        onBlur={handleBlur}
-                        value={values.title}
-                      />
-                      <StyledInput
-                        type="password"
-                        name="password"
-                        placeholder="Password"
-                        onChange={handleChange}
-                        onBlur={handleBlur}
-                        value={values.title}
-                      />
-                      {pageType === 'login' && (
-                      <Button activecolor="notes" type="submit">
-                        sign in
-                      </Button>
-                      )}
-                      {pageType === 'register' && (
-                      <Button activecolor="notes" type="submit">
-                        register
-                      </Button>
-                      )}
-                    </StyledForm>
-                    {pageType === 'login'
-                  && <StyledLink to={routes.register}>I want create account!</StyledLink>}
-                    {pageType === 'register'
-                  && <StyledLink to={routes.login}>I want log in!</StyledLink>}
-                  </>
-                )}
-              </Formik>
-            )}
+            : (children)}
         </StyledAuthCard>
-      </StyledWrapper>
-    );
-  }
-}
+      </AnimatePresence>
+    </StyledWrapper>
+  );
+};
 
 const mapStateToProps = ({ userID = null, isLoading }) => ({ userID, isLoading });
 
-const mapDispatchToProps = (dispatch) => ({
-  authenticate: (username, password) => dispatch(authenticateAction(username, password)),
-});
-
 AuthTemplate.propTypes = {
+  keyInfo: PropTypes.string,
+  children: PropTypes.oneOfType([PropTypes.element, PropTypes.node]).isRequired,
   isLoading: PropTypes.bool,
-  authenticate: PropTypes.func.isRequired,
   userID: PropTypes.string,
-  location: PropTypes.shape({
-    pathname: PropTypes.string.isRequired,
-  }).isRequired,
 };
 
 AuthTemplate.defaultProps = {
+  keyInfo: 'noKey',
   isLoading: false,
   userID: null,
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(withRouter(AuthTemplate));
+export default connect(mapStateToProps)(AuthTemplate);

@@ -8,7 +8,6 @@ import { fetchItems as fetchItemsAction } from 'actions';
 class Notes extends Component {
   componentDidMount() {
     const { fetchNotes } = this.props;
-
     fetchNotes();
   }
 
