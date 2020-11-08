@@ -10,8 +10,9 @@ import withContext from 'hoc/withContext';
 import { connect } from 'react-redux';
 import { removeItem as removeItemAction } from 'actions';
 import Loader from 'components/atoms/Loader/Loader';
+import { motion } from 'framer-motion';
 
-const StyledWrapper = styled.div`
+const StyledWrapper = styled(motion.div)`
   padding: 1.5rem 3rem;
   margin: 2rem 1rem;
   display: flex;
@@ -25,6 +26,9 @@ const StyledWrapper = styled.div`
   border-radius: 1rem;
 
   @media screen and ${({ theme: { viewPorts } }) => viewPorts.viewport7} {
+    display: ${({ activecolor }) => (activecolor === 'twitters' ? 'grid' : 'flex')};
+    grid-template-columns: auto 20rem;
+    grid-template-rows: auto 1fr auto;
     margin-left: 3rem;
     padding: 1.5rem 3rem;
     min-height: 30rem;
@@ -68,9 +72,7 @@ const StyledImage = styled.img`
     height: 15rem;
 
     @media screen and ${({ theme: { viewPorts } }) => viewPorts.viewport7} {
-      position: absolute;
-      right: 80px;
-      top: 50px;
+      grid-area: 1 / 2 / 3 / 2;
       width: 12rem;
       height: 12rem;
     }
@@ -100,7 +102,16 @@ const DetailsTemplate = ({
   <UserPageTemplate keyInfo="DetailsTemplate">
     {!title ? <StyledLoader />
       : (
-        <StyledWrapper activecolor={pageContext}>
+        <StyledWrapper
+          animate={{
+            opacity: [0, 1],
+            y: [10, -5, 0],
+          }}
+          transition={{
+            duration: 0.3,
+          }}
+          activecolor={pageContext}
+        >
           {pageContext === 'twitters' && (
           <StyledImage alt={title} src={`https://unavatar.now.sh/twitter/${twitterName}`} />
           )}
