@@ -35,7 +35,7 @@ const StyledLink = styled(Link)`
 `;
 
 const AuthPage = ({ authenticate }) => (
-  <AuthTemplate keyInfo="Login">
+  <AuthTemplate>
     <Formik
       initialValues={{ username: '', password: '' }}
       onSubmit={({ username, password }) => {

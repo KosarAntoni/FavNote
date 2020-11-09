@@ -46,7 +46,7 @@ const StyledHeading = styled(Heading)`
 `;
 
 const DateInfo = styled(Paragraph)`
-  font-weight: ${({ theme }) => theme.bold};
+  font-weight: ${({ theme }) => theme.regular};
   font-size: ${({ theme }) => theme.fontSize.xs};
   margin: 0 0 1rem;
 `;

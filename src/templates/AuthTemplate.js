@@ -6,7 +6,7 @@ import { routes } from 'routes';
 import PropTypes from 'prop-types';
 import Loader from 'components/atoms/Loader/Loader';
 import { connect } from 'react-redux';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 
 const StyledWrapper = styled.div`
   position: fixed;
@@ -41,40 +41,34 @@ const StyledHeading = styled(Heading)`
 `;
 
 const AuthTemplate = ({
-  userID, isLoading, children, keyInfo,
+  userID, isLoading, children,
 }) => {
   if (userID) { return (<Redirect to={routes.home} />); }
 
   return (
     <StyledWrapper>
       <StyledHeading>Your new favorite online notes experience</StyledHeading>
-      <AnimatePresence exitBeforeEnter>
-        <StyledAuthCard
-          initial={{
-            opacity: 0,
-            scale: 0.9,
-            y: 10,
-          }}
-          animate={{
-            opacity: 1,
-            scale: 1,
-            y: 0,
-          }}
-          key={keyInfo}
-          exit={{
-            opacity: 0,
-            scale: 0.9,
-            y: 10,
-            transition: { duration: 0.15 },
-          }}
-          transition={{
-            duration: 0.3,
-          }}
-        >
-          {isLoading ? <Loader />
-            : (children)}
-        </StyledAuthCard>
-      </AnimatePresence>
+      <StyledAuthCard
+        initial={{
+          opacity: 0,
+          y: 10,
+        }}
+        animate={{
+          opacity: 1,
+          y: 0,
+        }}
+        exit={{
+          opacity: 0,
+          y: 10,
+          transition: { duration: 0.15 },
+        }}
+        transition={{
+          duration: 0.3,
+        }}
+      >
+        {isLoading ? <Loader />
+          : (children)}
+      </StyledAuthCard>
     </StyledWrapper>
   );
 };
@@ -82,14 +76,12 @@ const AuthTemplate = ({
 const mapStateToProps = ({ userID = null, isLoading }) => ({ userID, isLoading });
 
 AuthTemplate.propTypes = {
-  keyInfo: PropTypes.string,
   children: PropTypes.oneOfType([PropTypes.element, PropTypes.node]).isRequired,
   isLoading: PropTypes.bool,
   userID: PropTypes.string,
 };
 
 AuthTemplate.defaultProps = {
-  keyInfo: 'noKey',
   isLoading: false,
   userID: null,
 };

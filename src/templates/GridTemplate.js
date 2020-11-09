@@ -25,11 +25,11 @@ const StyledWrapper = styled.div`
   padding: 0 1rem;
   
     @media screen and ${({ theme: { viewPorts } }) => viewPorts.viewport7} {
-      padding: 4rem 4rem 4rem 4rem;
+      padding: 2rem 4rem 4rem 4rem;
     }
   
     @media screen and ${({ theme: { viewPorts } }) => viewPorts.viewport9} {
-      padding: 5rem 15rem 5rem 5rem;
+      padding: 2rem 15rem 5rem 5rem;
     }
 `;
 
@@ -143,7 +143,7 @@ class GridTemplate extends Component {
     const content = filteredContent || children;
 
     return (
-      <UserPageTemplate keyInfo={pageContext}>
+      <UserPageTemplate>
         <StyledWrapper>
           <StyledPageHeader>
             <Input

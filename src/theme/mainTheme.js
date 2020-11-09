@@ -10,6 +10,7 @@ export const theme = {
   white: 'rgb(255, 255, 255)',
   whiteHover: 'rgba(255, 255, 255, 0.4)',
   light: 300,
+  regular: 400,
   bold: 600,
   fontSize: {
     xxs: '1rem',
