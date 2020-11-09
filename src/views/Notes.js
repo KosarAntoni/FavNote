@@ -16,14 +16,15 @@ class Notes extends Component {
     return (
       <GridTemplate isLoading={isLoading}>
         {notes.map(({
-          id, title, content,
+          id, title, content, published_at: publishedAt,
         }, i) => (
           <Card
             animationDelay={i * 0.15}
             id={id}
+            dateInfo={publishedAt}
             title={title}
             content={content}
-            key={title}
+            key={id}
           />
         ))}
       </GridTemplate>
@@ -36,6 +37,7 @@ Notes.propTypes = {
   notes: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.number.isRequired,
+      published_at: PropTypes.string.isRequired,
       title: PropTypes.string.isRequired,
       content: PropTypes.string.isRequired,
     }),

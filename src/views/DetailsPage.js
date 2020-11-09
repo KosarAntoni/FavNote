@@ -28,7 +28,7 @@ class DetailsPage extends Component {
   render() {
     const {
       activeItem: {
-        id, title, content, articleUrl, twitterName,
+        id, title, content, articleUrl, twitterName, published_at: publishedAt,
       },
     } = this.state;
 
@@ -36,6 +36,7 @@ class DetailsPage extends Component {
       <DetailsTemplate
         id={id}
         title={title}
+        dateInfo={publishedAt}
         content={content}
         articleUrl={articleUrl}
         twitterName={twitterName}

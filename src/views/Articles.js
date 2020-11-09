@@ -16,11 +16,12 @@ class Articles extends Component {
     return (
       <GridTemplate isLoading={isLoading}>
         {articles.map(({
-          id, title, content, articleUrl,
+          id, title, content, articleUrl, published_at: publishedAt,
         }, i) => (
           <Card
             animationDelay={i * 0.15}
             id={id}
+            dateInfo={publishedAt}
             title={title}
             content={content}
             articleUrl={articleUrl}
@@ -37,6 +38,7 @@ Articles.propTypes = {
   articles: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.number.isRequired,
+      published_at: PropTypes.string.isRequired,
       title: PropTypes.string.isRequired,
       content: PropTypes.string.isRequired,
       articleUrl: PropTypes.string.isRequired,

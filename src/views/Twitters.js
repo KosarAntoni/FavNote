@@ -18,11 +18,12 @@ class Twitters extends Component {
     return (
       <GridTemplate isLoading={isLoading}>
         {twitters.map(({
-          id, title, content, twitterName,
+          id, title, content, twitterName, published_at: publishedAt,
         }, i) => (
           <Card
             animationDelay={i * 0.15}
             id={id}
+            dateInfo={publishedAt}
             title={title}
             content={content}
             twitterName={twitterName}
@@ -39,6 +40,7 @@ Twitters.propTypes = {
   twitters: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.number.isRequired,
+      published_at: PropTypes.string.isRequired,
       title: PropTypes.string.isRequired,
       content: PropTypes.string.isRequired,
       twitterName: PropTypes.string.isRequired,

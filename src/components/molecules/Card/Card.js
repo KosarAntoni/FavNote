@@ -10,6 +10,7 @@ import { connect } from 'react-redux';
 import { removeItem as removeItemAction } from 'actions';
 import withContext from 'hoc/withContext';
 import { motion } from 'framer-motion';
+import Moment from 'react-moment';
 
 const StyledWrapper = styled(motion.div)`
   padding: 1.5rem 3rem;
@@ -44,11 +45,11 @@ const StyledHeading = styled(Heading)`
   line-height: 3.6rem;
 `;
 
-// const DateInfo = styled(Paragraph)`
-//   font-weight: ${({ theme }) => theme.bold};
-//   font-size: ${({ theme }) => theme.fontSize.xs};
-//   margin: 0 0 1rem;
-// `;
+const DateInfo = styled(Paragraph)`
+  font-weight: ${({ theme }) => theme.bold};
+  font-size: ${({ theme }) => theme.fontSize.xs};
+  margin: 0 0 1rem;
+`;
 
 const StyledAvatar = styled.img`
   width: ${({ theme }) => theme.fontSize.xl};
@@ -93,8 +94,12 @@ class Card extends Component {
       animationDelay,
       pageContext,
       title,
-      // created,
-      content, twitterName, articleUrl, id, removeItem,
+      dateInfo,
+      content,
+      twitterName,
+      articleUrl,
+      id,
+      removeItem,
     } = this.props;
 
     const { redirect } = this.state;
@@ -116,7 +121,6 @@ class Card extends Component {
       >
         <HeadingWrapper>
           <StyledHeading>{title}</StyledHeading>
-          {/* <DateInfo>{created}</DateInfo> */}
           {pageContext === 'twitters'
           && <StyledAvatar src={`https://unavatar.now.sh/twitter/${twitterName}`} />}
           {pageContext === 'articles' && <StyledLinkButton href={articleUrl} />}
@@ -125,6 +129,7 @@ class Card extends Component {
           <Paragraph>
             {content}
           </Paragraph>
+          <DateInfo as={Moment} format="DD-MMMM-YYYY">{dateInfo}</DateInfo>
           <ButtonsWrapper>
             <StyledButton
               onClick={this.handleOpenClick}
@@ -149,6 +154,7 @@ Card.propTypes = {
   animationDelay: PropTypes.number,
   pageContext: PropTypes.oneOf(['notes', 'twitters', 'articles']),
   id: PropTypes.number.isRequired,
+  dateInfo: PropTypes.string.isRequired,
   title: PropTypes.string.isRequired,
   twitterName: PropTypes.string,
   articleUrl: PropTypes.string,

@@ -11,6 +11,7 @@ import { connect } from 'react-redux';
 import { removeItem as removeItemAction } from 'actions';
 import Loader from 'components/atoms/Loader/Loader';
 import { motion } from 'framer-motion';
+import Moment from 'react-moment';
 
 const StyledWrapper = styled(motion.div)`
   padding: 1.5rem 3rem;
@@ -28,7 +29,7 @@ const StyledWrapper = styled(motion.div)`
   @media screen and ${({ theme: { viewPorts } }) => viewPorts.viewport7} {
     display: ${({ activecolor }) => (activecolor === 'twitters' ? 'grid' : 'flex')};
     grid-template-columns: auto 20rem;
-    grid-template-rows: auto 1fr auto;
+    grid-template-rows: auto 1fr auto auto;
     margin-left: 3rem;
     padding: 1.5rem 3rem;
     min-height: 30rem;
@@ -44,7 +45,7 @@ const StyledPageHeader = styled.div`
 `;
 
 const StyledHeading = styled(Heading)`
-  margin: 2rem 0 0 0;
+  margin: 0;
 
   ::first-letter {
     text-transform: uppercase;
@@ -52,8 +53,7 @@ const StyledHeading = styled(Heading)`
 `;
 
 const StyledParagraph = styled(Paragraph)`
-  margin: 0;
-  font-weight: ${({ theme }) => theme.bold};
+  margin-bottom: auto;
 `;
 
 const StyledLink = styled.a`
@@ -62,24 +62,31 @@ const StyledLink = styled.a`
   font-size: ${({ theme }) => theme.fontSize.xs};
   color: black;
   text-transform: uppercase;
-  margin: 2rem 0 5rem;
+  margin: 2rem 0 1rem;
+`;
+
+const DateInfo = styled(Paragraph)`
+  font-weight: ${({ theme }) => theme.bold};
+  font-size: ${({ theme }) => theme.fontSize.xs};
+  margin: 0 0 1rem;
 `;
 
 const StyledImage = styled.img`
     border-radius: 50%;
-    margin: 0 auto;
+    margin: 0 0 0 auto;
     width: 15rem;
     height: 15rem;
+    border: 1px solid ${({ theme }) => theme.grey300};
+
 
     @media screen and ${({ theme: { viewPorts } }) => viewPorts.viewport7} {
-      grid-area: 1 / 2 / 3 / 2;
+      grid-area: 1 / 2 / 4 / 2;
       width: 12rem;
       height: 12rem;
     }
 `;
 
 const ButtonsWrapper = styled.div`
-  margin-top: auto;
   display: flex;
   justify-content: space-between;
     @media screen and ${({ theme: { viewPorts } }) => viewPorts.viewport7} {
@@ -97,7 +104,7 @@ const StyledLoader = styled(Loader)`
 `;
 
 const DetailsTemplate = ({
-  id, pageContext, title, created, content, articleUrl, twitterName, removeItem,
+  id, pageContext, title, content, articleUrl, twitterName, removeItem, dateInfo,
 }) => (
   <UserPageTemplate keyInfo="DetailsTemplate">
     {!title ? <StyledLoader />
@@ -119,10 +126,15 @@ const DetailsTemplate = ({
             <StyledHeading big as="h1">
               {title}
             </StyledHeading>
-            <StyledParagraph>{created}</StyledParagraph>
           </StyledPageHeader>
-          <Paragraph>{content}</Paragraph>
+          <StyledParagraph>{content}</StyledParagraph>
           {pageContext === 'articles' && <StyledLink href={articleUrl}>Open article</StyledLink>}
+          <DateInfo>
+            {'Posted: '}
+            <Moment format="DD-MMMM-YYYY">
+              {dateInfo}
+            </Moment>
+          </DateInfo>
           <ButtonsWrapper>
             <StyledButton
               as={Link}
@@ -149,7 +161,7 @@ const DetailsTemplate = ({
 DetailsTemplate.propTypes = {
   pageContext: PropTypes.string.isRequired,
   title: PropTypes.string,
-  created: PropTypes.string,
+  dateInfo: PropTypes.string,
   content: PropTypes.string,
   articleUrl: PropTypes.string,
   twitterName: PropTypes.string,
@@ -162,7 +174,7 @@ DetailsTemplate.propTypes = {
 
 DetailsTemplate.defaultProps = {
   title: '',
-  created: '',
+  dateInfo: '',
   content: '',
   articleUrl: '',
   twitterName: '',

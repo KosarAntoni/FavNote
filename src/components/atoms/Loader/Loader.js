@@ -17,7 +17,6 @@ const Loader = styled.div`
   height: 20rem;
   
   animation: ${rotate} 2s linear infinite;
-
 `;
 
 export default Loader;
