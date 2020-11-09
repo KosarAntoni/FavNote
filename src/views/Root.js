@@ -26,13 +26,10 @@ const Root = () => (
         <MainTemplate>
           <Route render={({ location }) => (
             <>
-              <AnimatePresence initial={false}>
+              <AnimatePresence initial={false} exitBeforeEnter>
                 <Switch location={location} key={location.pathname}>
                   <Route exact path={routes.login} component={LoginPage} />
                   <Route exact path={routes.register} component={RegisterPage} />
-                  <Route path={routes.note} component={DetailsPage} />
-                  <Route path={routes.twitter} component={DetailsPage} />
-                  <Route path={routes.article} component={DetailsPage} />
                 </Switch>
               </AnimatePresence>
               <Route
@@ -40,6 +37,8 @@ const Root = () => (
                 path={routes.home}
                 render={() => <Redirect to={routes.notes} />}
               />
+              <Route path={routes.twitter} component={DetailsPage} />
+              <Route path={routes.article} component={DetailsPage} />
               <Route exact path={routes.notes} component={Notes} />
               <Route exact path={routes.twitters} component={Twitters} />
               <Route exact path={routes.articles} component={Articles} />
