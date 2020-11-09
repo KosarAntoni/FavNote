@@ -14,36 +14,17 @@ import { motion } from 'framer-motion';
 import Moment from 'react-moment';
 
 const StyledWrapper = styled(motion.div)`
-  position: fixed;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  z-index: 19;
-
-  overflow: scroll;
-  padding-bottom: 7rem;
-
-    @media screen and ${({ theme: { viewPorts } }) => viewPorts.viewport7} {
-      left: 10rem;
-    }
-`;
-
-const StyledBackground = styled(motion.div)`
   padding: 1.5rem 3rem;
   margin: 2rem 1rem;
   display: flex;
   flex-direction: column;
 
-  background-color: ${({ theme }) => (theme.white)};
-
-
   border-width: 2px;
   border-style: solid;
   border-color: ${({ activecolor, theme }) => (activecolor ? theme[activecolor] : theme.white)};
-  border-radius: 1rem;
 
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.01), 0 4px 8px rgba(0, 0, 0, 0.02), 0 1px 12px rgba(0, 0, 0, 0.12);
+  border-radius: 1rem;
 
   @media screen and ${({ theme: { viewPorts } }) => viewPorts.viewport7} {
     display: ${({ activecolor }) => (activecolor === 'twitters' ? 'grid' : 'flex')};
@@ -125,71 +106,55 @@ const StyledLoader = styled(Loader)`
 const DetailsTemplate = ({
   id, pageContext, title, content, articleUrl, twitterName, removeItem, dateInfo,
 }) => (
-  <UserPageTemplate>
-    <StyledWrapper
-      animate={{
-        opacity: 1,
-      }}
-      exit={{
-        opacity: 1,
-      }}
-      transition={{
-        duration: 0,
-      }}
-    >
-      {!title ? <StyledLoader />
-        : (
-          <StyledBackground
-            animate={{
-              opacity: [0, 1],
-              y: [20, -5, 0],
-            }}
-            exit={{
-              opacity: 0,
-              y: 10,
-              transition: { duration: 0.15 },
-            }}
-            transition={{
-              duration: 0.3,
-            }}
-            activecolor={pageContext}
-          >
-            {pageContext === 'twitters' && (
-            <StyledImage alt={title} src={`https://unavatar.now.sh/twitter/${twitterName}`} />
-            )}
-            <StyledPageHeader>
-              <StyledHeading big as="h1">
-                {title}
-              </StyledHeading>
-            </StyledPageHeader>
-            <StyledParagraph>{content}</StyledParagraph>
-            {pageContext === 'articles' && <StyledLink href={articleUrl}>Open article</StyledLink>}
-            <DateInfo>
-              {'Posted: '}
-              <Moment format="DD-MMMM-YYYY">
-                {dateInfo}
-              </Moment>
-            </DateInfo>
-            <ButtonsWrapper>
-              <StyledButton
-                as={Link}
-                to={`/${pageContext}`}
-                activecolor={pageContext}
-              >
-                close
-              </StyledButton>
-              <StyledButton
-                as={Link}
-                to={`/${pageContext}`}
-                onClick={() => removeItem(pageContext, id)}
-                activecolor={pageContext}
-              >
-                Remove
-              </StyledButton>
-            </ButtonsWrapper>
-          </StyledBackground>
-        )}
-    </StyledWrapper>
+  <UserPageTemplate keyInfo="DetailsTemplate">
+    {!title ? <StyledLoader />
+      : (
+        <StyledWrapper
+          animate={{
+            opacity: [0, 1],
+            y: [10, -5, 0],
+          }}
+          transition={{
+            duration: 0.3,
+          }}
+          activecolor={pageContext}
+        >
+          {pageContext === 'twitters' && (
+          <StyledImage alt={title} src={`https://unavatar.now.sh/twitter/${twitterName}`} />
+          )}
+          <StyledPageHeader>
+            <StyledHeading big as="h1">
+              {title}
+            </StyledHeading>
+          </StyledPageHeader>
+          <StyledParagraph>{content}</StyledParagraph>
+          {pageContext === 'articles' && <StyledLink href={articleUrl}>Open article</StyledLink>}
+          <DateInfo>
+            {'Posted: '}
+            <Moment format="DD-MMMM-YYYY">
+              {dateInfo}
+            </Moment>
+          </DateInfo>
+          <ButtonsWrapper>
+            <StyledButton
+              as={Link}
+              to={`/${pageContext}`}
+              activecolor={pageContext}
+            >
+              close
+            </StyledButton>
+            <StyledButton
+              as={Link}
+              to={`/${pageContext}`}
+              onClick={() => removeItem(pageContext, id)}
+              activecolor={pageContext}
+            >
+              Remove
+            </StyledButton>
+          </ButtonsWrapper>
+        </StyledWrapper>
+      )}
+
   </UserPageTemplate>
 );
 
