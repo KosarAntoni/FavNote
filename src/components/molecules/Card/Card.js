@@ -127,7 +127,8 @@ class Card extends Component {
         </HeadingWrapper>
         <InnerWrapper flex>
           <Paragraph>
-            {content}
+            {content.slice(0, 150)}
+            {content.length >= 150 && '...'}
           </Paragraph>
           <DateInfo as={Moment} format="DD-MMMM-YYYY">{dateInfo}</DateInfo>
           <ButtonsWrapper>
