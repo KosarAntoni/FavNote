@@ -41,9 +41,9 @@ const StyledHeading = styled(Heading)`
 `;
 
 const AuthTemplate = ({
-  userID, isLoading, children,
+  userJWT, isLoading, children,
 }) => {
-  if (userID) { return (<Redirect to={routes.home} />); }
+  if (userJWT) { return (<Redirect to={routes.home} />); }
 
   return (
     <StyledWrapper>
@@ -73,17 +73,17 @@ const AuthTemplate = ({
   );
 };
 
-const mapStateToProps = ({ userID = null, isLoading }) => ({ userID, isLoading });
+const mapStateToProps = ({ userJWT = null, isLoading }) => ({ userJWT, isLoading });
 
 AuthTemplate.propTypes = {
   children: PropTypes.oneOfType([PropTypes.element, PropTypes.node]).isRequired,
   isLoading: PropTypes.bool,
-  userID: PropTypes.string,
+  userJWT: PropTypes.string,
 };
 
 AuthTemplate.defaultProps = {
   isLoading: false,
-  userID: null,
+  userJWT: null,
 };
 
 export default connect(mapStateToProps)(AuthTemplate);

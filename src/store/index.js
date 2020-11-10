@@ -9,7 +9,7 @@ import storage from 'redux-persist/lib/storage';
 const persistConfig = { // configuration object for redux-persist
   key: 'root',
   storage,
-  whitelist: ['userID'],
+  whitelist: ['userJWT', 'userID', 'username'],
 };
 
 const persistedReducer = persistReducer(persistConfig, notesApp);

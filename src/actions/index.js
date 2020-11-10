@@ -42,9 +42,10 @@ export const fetchItems = (itemType) => (dispatch, getState) => {
     .get('http://localhost:1337/notes', {
       headers: {
         Authorization:
-          `Bearer ${getState().userID}`,
+          `Bearer ${getState().userJWT}`,
       },
       params: {
+        userID: getState().userID,
         type: itemType,
       },
     })
@@ -67,7 +68,7 @@ export const removeItem = (itemType, id) => (dispatch, getState) => {
   axios.delete(`http://localhost:1337/notes/${id}`, {
     headers: {
       Authorization:
-        `Bearer ${getState().userID}`,
+        `Bearer ${getState().userJWT}`,
     },
   }).then(() => (
     dispatch({
@@ -85,15 +86,17 @@ export const removeItem = (itemType, id) => (dispatch, getState) => {
 
 export const addItem = (itemType, itemContent) => (dispatch, getState) => {
   dispatch({ type: 'ADD_ITEM_REQUEST' });
+  console.log(getState());
   axios.post('http://localhost:1337/notes',
     {
+      userID: getState().userID,
       type: itemType,
       ...itemContent,
     },
     {
       headers: {
         Authorization:
-          `Bearer ${getState().userID}`,
+          `Bearer ${getState().userJWT}`,
       },
     }).then(({ data }) => (
     dispatch({

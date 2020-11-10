@@ -34,7 +34,9 @@ const rootReducer = (state = initialState, action) => {
       return {
         ...state,
         isLoading: false,
-        userID: action.payload.data.jwt,
+        userJWT: action.payload.data.jwt,
+        userID: action.payload.data.user.id,
+        username: action.payload.data.user.username,
       };
     case ('AUTHENTICATION_FAILURE'):
       return {
@@ -50,7 +52,9 @@ const rootReducer = (state = initialState, action) => {
       return {
         ...state,
         isLoading: false,
-        userID: action.payload.data.jwt,
+        userJWT: action.payload.data.jwt,
+        userID: action.payload.data.user.id,
+        username: action.payload.data.user.username,
       };
     case ('REGISTRATION_FAILURE'):
       return {
