@@ -13,7 +13,7 @@ import store, { persistor } from 'store';
 import DetailsPage from 'views/DetailsPage';
 import LoginPage from 'views/LoginPage';
 import RegisterPage from 'views/RegisterPage';
-import { AnimatePresence } from 'framer-motion';
+import PrivateRoute from 'utils/PrivateRoute';
 
 const Root = () => (
   <Provider store={store}>
@@ -24,28 +24,21 @@ const Root = () => (
     <PersistGate loading={null} persistor={persistor}>
       <BrowserRouter>
         <MainTemplate>
-          <Route render={({ location }) => (
-            <>
-              <AnimatePresence initial={false} exitBeforeEnter>
-                <Switch location={location} key={location.pathname}>
-                  <Route exact path={routes.login} component={LoginPage} />
-                  <Route exact path={routes.register} component={RegisterPage} />
-                </Switch>
-              </AnimatePresence>
-              <Route
-                exact
-                path={routes.home}
-                render={() => <Redirect to={routes.notes} />}
-              />
-              <Route path={routes.note} component={DetailsPage} />
-              <Route path={routes.twitter} component={DetailsPage} />
-              <Route path={routes.article} component={DetailsPage} />
-              <Route exact path={routes.notes} component={Notes} />
-              <Route exact path={routes.twitters} component={Twitters} />
-              <Route exact path={routes.articles} component={Articles} />
-            </>
-          )}
-          />
+          <Switch>
+            <Route
+              exact
+              path={routes.home}
+              render={() => <Redirect to={routes.notes} />}
+            />
+            <Route exact path={routes.login} component={LoginPage} />
+            <Route exact path={routes.register} component={RegisterPage} />
+            <PrivateRoute path={routes.note} component={DetailsPage} />
+            <PrivateRoute path={routes.twitter} component={DetailsPage} />
+            <PrivateRoute path={routes.article} component={DetailsPage} />
+            <PrivateRoute exact path={routes.notes} component={Notes} />
+            <PrivateRoute exact path={routes.twitters} component={Twitters} />
+            <PrivateRoute exact path={routes.articles} component={Articles} />
+          </Switch>
         </MainTemplate>
       </BrowserRouter>
     </PersistGate>

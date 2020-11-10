@@ -76,6 +76,7 @@ const NewItemBar = ({
             onChange={handleChange}
             onBlur={handleBlur}
             value={values.title}
+            activecolor={pageContext}
           />
           {pageContext === 'twitters' && (
             <StyledInput
@@ -85,6 +86,7 @@ const NewItemBar = ({
               onChange={handleChange}
               onBlur={handleBlur}
               value={values.twitterName}
+              activecolor={pageContext}
             />
           )}
           {pageContext === 'articles' && (
@@ -95,6 +97,7 @@ const NewItemBar = ({
               onChange={handleChange}
               onBlur={handleBlur}
               value={values.articleUrl}
+              activecolor={pageContext}
             />
           )}
           <StyledTextArea
@@ -103,6 +106,7 @@ const NewItemBar = ({
             onChange={handleChange}
             onBlur={handleBlur}
             value={values.content}
+            activecolor={pageContext}
           />
           <Button type="submit" activecolor={pageContext}>
             Add Note

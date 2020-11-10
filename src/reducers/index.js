@@ -1,5 +1,6 @@
 const initialState = {
   isLoading: false,
+  userJWT: null,
 };
 
 const rootReducer = (state = initialState, action) => {
