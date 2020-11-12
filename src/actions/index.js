@@ -10,8 +10,9 @@ export const authenticate = (identifier, password) => (dispatch) => {
     }).then((payload) => {
       dispatch({ type: 'AUTHENTICATION_SUCCESS', payload });
     })
-    .catch(() => {
-      dispatch({ type: 'AUTHENTICATION_FAILURE' });
+    .catch(({ response }) => {
+      const errorData = response.data;
+      dispatch({ type: 'AUTHENTICATION_FAILURE', errorData });
     });
 };
 
@@ -26,8 +27,9 @@ export const register = (username, email, password) => (dispatch) => {
     }).then((payload) => {
       dispatch({ type: 'REGISTRATION_SUCCESS', payload });
     })
-    .catch(() => {
-      dispatch({ type: 'REGISTRATION_FAILURE' });
+    .catch(({ response }) => {
+      const errorData = response.data;
+      dispatch({ type: 'REGISTRATION_FAILURE', errorData });
     });
 };
 
@@ -58,8 +60,37 @@ export const fetchItems = (itemType) => (dispatch, getState) => {
         },
       });
     })
-    .catch(() => {
-      dispatch({ type: 'FETCH_FAILURE' });
+    .catch(({ response }) => {
+      const errorData = {
+        status: response.status,
+        statusText: response.statusText,
+      };
+      dispatch({ type: 'FETCH_FAILURE', errorData });
+    });
+};
+
+export const fetchSingleItem = (id) => (dispatch, getState) => {
+  dispatch({ type: 'FETCH_ITEM_REQUEST' });
+
+  return axios
+    .get(`http://localhost:1337/notes/${id}`, {
+      headers: {
+        Authorization:
+          `Bearer ${getState().userJWT}`,
+      },
+    })
+    .then(({ data }) => {
+      dispatch({
+        type: 'FETCH_ITEM_SUCCESS',
+        payload: data,
+      });
+    })
+    .catch(({ response }) => {
+      const errorData = {
+        status: response.status,
+        statusText: response.statusText,
+      };
+      dispatch({ type: 'FETCH_ITEM_FAILURE', errorData });
     });
 };
 
@@ -86,7 +117,6 @@ export const removeItem = (itemType, id) => (dispatch, getState) => {
 
 export const addItem = (itemType, itemContent) => (dispatch, getState) => {
   dispatch({ type: 'ADD_ITEM_REQUEST' });
-  console.log(getState());
   axios.post('http://localhost:1337/notes',
     {
       userID: getState().userID,
@@ -109,4 +139,8 @@ export const addItem = (itemType, itemContent) => (dispatch, getState) => {
   )).catch(() => {
     dispatch({ type: 'ADD_ITEM_FAILURE' });
   });
+};
+
+export const clearErrors = () => (dispatch) => {
+  dispatch({ type: 'CLEAR_ERRORS' });
 };

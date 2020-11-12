@@ -2,6 +2,7 @@ export const theme = {
   notes: 'rgb(255, 216, 41)',
   twitters: 'rgb(138, 216, 244)',
   articles: 'rgb(140, 206, 120)',
+  red: 'rgb(204, 0, 0)',
   grey100: 'rgb(240, 240, 240)',
   grey200: 'rgb(230, 230, 230)',
   grey300: 'rgb(200, 200, 200)',

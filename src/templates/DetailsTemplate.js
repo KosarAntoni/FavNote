@@ -7,11 +7,15 @@ import Heading from 'components/atoms/Heading/Heading';
 import Paragraph from 'components/atoms/Paragraph/Paragraph';
 import Button from 'components/atoms/Button/Button';
 import withContext from 'hoc/withContext';
-import { connect } from 'react-redux';
-import { removeItem as removeItemAction } from 'actions';
 import Loader from 'components/atoms/Loader/Loader';
 import { motion } from 'framer-motion';
 import Moment from 'react-moment';
+import ErrorModal from 'components/molecules/ErrorModal/ErrorModal';
+
+const StyledErrorWrapper = styled.div`
+  display: flex;
+  justify-content: center;
+`;
 
 const StyledWrapper = styled(motion.div)`
   padding: 1.5rem 3rem;
@@ -104,10 +108,27 @@ const StyledLoader = styled(Loader)`
 `;
 
 const DetailsTemplate = ({
-  id, pageContext, title, content, articleUrl, twitterName, removeItem, dateInfo,
+  id,
+  pageContext,
+  title,
+  content,
+  articleUrl,
+  twitterName,
+  dateInfo,
+  errorInfo,
+  handleClearErrors,
+  handleRemove,
+  isLoading,
 }) => (
-  <UserPageTemplate keyInfo="DetailsTemplate">
-    {!title ? <StyledLoader />
+  <UserPageTemplate>
+    { errorInfo
+    && (
+    <StyledErrorWrapper>
+      <ErrorModal onClickAction={handleClearErrors}>{errorInfo.statusText}</ErrorModal>
+    </StyledErrorWrapper>
+    ) }
+
+    { isLoading ? <StyledLoader />
       : (
         <StyledWrapper
           animate={{
@@ -146,7 +167,7 @@ const DetailsTemplate = ({
             <StyledButton
               as={Link}
               to={`/${pageContext}`}
-              onClick={() => removeItem(pageContext, id)}
+              onClick={() => handleRemove(pageContext, id)}
               activecolor={pageContext}
             >
               Remove
@@ -159,30 +180,43 @@ const DetailsTemplate = ({
 );
 
 DetailsTemplate.propTypes = {
-  pageContext: PropTypes.string.isRequired,
+  pageContext: PropTypes.string,
   title: PropTypes.string,
   dateInfo: PropTypes.string,
   content: PropTypes.string,
   articleUrl: PropTypes.string,
   twitterName: PropTypes.string,
+  isLoading: PropTypes.bool,
+  handleClearErrors: PropTypes.func,
+  handleRemove: PropTypes.func,
+  errorInfo: PropTypes.shape({
+    status: PropTypes.oneOfType([
+      PropTypes.string,
+      PropTypes.number,
+    ]),
+    statusText: PropTypes.string,
+  }),
   id: PropTypes.oneOfType([
     PropTypes.string,
     PropTypes.number,
   ]),
-  removeItem: PropTypes.func.isRequired,
 };
 
 DetailsTemplate.defaultProps = {
+  pageContext: 'notes',
   title: '',
   dateInfo: '',
   content: '',
   articleUrl: '',
   twitterName: '',
   id: '',
+  isLoading: false,
+  handleClearErrors: () => {},
+  handleRemove: () => {},
+  errorInfo: {
+    status: '',
+    statusText: '',
+  },
 };
 
-const mapDispatchToProps = (dispatch) => ({
-  removeItem: (itemType, id) => dispatch(removeItemAction(itemType, id)),
-});
-
-export default connect(null, mapDispatchToProps)(withContext(DetailsTemplate));
+export default withContext(DetailsTemplate);

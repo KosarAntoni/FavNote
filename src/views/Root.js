@@ -25,11 +25,6 @@ const Root = () => (
       <BrowserRouter>
         <MainTemplate>
           <Switch>
-            <Route
-              exact
-              path={routes.home}
-              render={() => <Redirect to={routes.notes} />}
-            />
             <Route exact path={routes.login} component={LoginPage} />
             <Route exact path={routes.register} component={RegisterPage} />
             <PrivateRoute path={routes.note} component={DetailsPage} />
@@ -38,6 +33,10 @@ const Root = () => (
             <PrivateRoute exact path={routes.notes} component={Notes} />
             <PrivateRoute exact path={routes.twitters} component={Twitters} />
             <PrivateRoute exact path={routes.articles} component={Articles} />
+            <Route
+              path={routes.home}
+              render={() => <Redirect to={routes.notes} />}
+            />
           </Switch>
         </MainTemplate>
       </BrowserRouter>

@@ -11,13 +11,13 @@ export default {
 export const Primary = () => {
   const label = 'Colors';
   const options = {
-    Primary: 'hsl(49, 100%, 58%)',
-    Secondary: 'hsl(196, 83%, 75%)',
-    Tertiary: 'hsl(106, 47%, 64%)',
+    Primary: 'notes',
+    Secondary: 'articles',
+    Tertiary: 'twitters',
   };
-  const defaultValue = 'hsl(49, 100%, 58%)';
+  const defaultValue = 'notes';
   const groupId = 'GROUP-ID1';
   const value = select(label, options, defaultValue, groupId);
-  return <Button color={value}>Hello</Button>;
+  return <Button activecolor={value}>Hello</Button>;
 };
 export const Secondary = () => <Button secondary>Secondary</Button>;

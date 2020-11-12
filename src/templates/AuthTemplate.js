@@ -6,7 +6,9 @@ import { routes } from 'routes';
 import PropTypes from 'prop-types';
 import Loader from 'components/atoms/Loader/Loader';
 import { connect } from 'react-redux';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
+import ErrorModal from 'components/molecules/ErrorModal/ErrorModal';
+import { clearErrors as clearErrorsAction } from 'actions';
 
 const StyledWrapper = styled.div`
   position: fixed;
@@ -41,12 +43,20 @@ const StyledHeading = styled(Heading)`
 `;
 
 const AuthTemplate = ({
-  userJWT, isLoading, children,
+  userJWT, isLoading, children, authError, clearErrors,
 }) => {
   if (userJWT) { return (<Redirect to={routes.home} />); }
 
   return (
     <StyledWrapper>
+      <AnimatePresence>
+        {authError && (
+          <ErrorModal onClickAction={clearErrors}>
+            {authError}
+          </ErrorModal>
+        )}
+      </AnimatePresence>
+
       <StyledHeading>Your new favorite online notes experience</StyledHeading>
       <StyledAuthCard
         initial={{
@@ -73,17 +83,26 @@ const AuthTemplate = ({
   );
 };
 
-const mapStateToProps = ({ userJWT = null, isLoading }) => ({ userJWT, isLoading });
+const mapStateToProps = ({ userJWT = null, isLoading, authError }) => (
+  { userJWT, isLoading, authError });
+
+const mapDispatchToProps = (dispatch) => ({
+  clearErrors: () => dispatch(clearErrorsAction()),
+});
 
 AuthTemplate.propTypes = {
   children: PropTypes.oneOfType([PropTypes.element, PropTypes.node]).isRequired,
   isLoading: PropTypes.bool,
   userJWT: PropTypes.string,
+  authError: PropTypes.string,
+  clearErrors: PropTypes.func,
 };
 
 AuthTemplate.defaultProps = {
   isLoading: false,
   userJWT: null,
+  authError: '',
+  clearErrors: () => {},
 };
 
-export default connect(mapStateToProps)(AuthTemplate);
+export default connect(mapStateToProps, mapDispatchToProps)(AuthTemplate);
