@@ -82,20 +82,44 @@ const rootReducer = (state = initialState, action) => {
         isLoading: false,
         errorInfo: { ...action.errorData },
       };
+    case ('ADD_ITEM_REQUEST'):
+      return {
+        ...state,
+        isLoading: true,
+      };
     case ('ADD_ITEM_SUCCESS'):
       return {
         ...state,
+        isLoading: false,
         [action.payload.itemType]: [
           ...state[action.payload.itemType],
           action.payload.data,
         ],
       };
+    case ('ADD_ITEM_FAILURE'):
+      return {
+        ...state,
+        isLoading: false,
+        errorInfo: { ...action.errorData },
+      };
+    case ('REMOVE_ITEM_REQUEST'):
+      return {
+        ...state,
+        isLoading: true,
+      };
     case ('REMOVE_ITEM_SUCCESS'):
       return {
         ...state,
+        isLoading: false,
         [action.payload.itemType]: [
           ...state[action.payload.itemType].filter(({ id }) => id !== action.payload.id),
         ],
+      };
+    case ('REMOVE_ITEM_FAILURE'):
+      return {
+        ...state,
+        isLoading: false,
+        errorInfo: { ...action.errorData },
       };
     case ('CLEAR_ERRORS'):
       return {

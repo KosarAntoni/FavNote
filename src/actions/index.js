@@ -110,8 +110,12 @@ export const removeItem = (itemType, id) => (dispatch, getState) => {
       },
     })
   ))
-    .catch(() => {
-      dispatch({ type: 'REMOVE_ITEM_FAILURE' });
+    .catch(({ response }) => {
+      const errorData = {
+        status: response.status,
+        statusText: response.statusText,
+      };
+      dispatch({ type: 'REMOVE_ITEM_FAILURE', errorData });
     });
 };
 
@@ -136,8 +140,12 @@ export const addItem = (itemType, itemContent) => (dispatch, getState) => {
         data,
       },
     })
-  )).catch(() => {
-    dispatch({ type: 'ADD_ITEM_FAILURE' });
+  )).catch(({ response }) => {
+    const errorData = {
+      status: response.status,
+      statusText: response.statusText,
+    };
+    dispatch({ type: 'ADD_ITEM_FAILURE', errorData });
   });
 };
 

@@ -7,15 +7,8 @@ import Heading from 'components/atoms/Heading/Heading';
 import Paragraph from 'components/atoms/Paragraph/Paragraph';
 import Button from 'components/atoms/Button/Button';
 import withContext from 'hoc/withContext';
-import Loader from 'components/atoms/Loader/Loader';
 import { motion } from 'framer-motion';
 import Moment from 'react-moment';
-import ErrorModal from 'components/molecules/ErrorModal/ErrorModal';
-
-const StyledErrorWrapper = styled.div`
-  display: flex;
-  justify-content: center;
-`;
 
 const StyledWrapper = styled(motion.div)`
   padding: 1.5rem 3rem;
@@ -76,14 +69,15 @@ const DateInfo = styled(Paragraph)`
 `;
 
 const StyledImage = styled.img`
+    margin: auto;
     border-radius: 50%;
-    margin: 0 0 0 auto;
     width: 15rem;
     height: 15rem;
     border: 1px solid ${({ theme }) => theme.grey300};
 
 
     @media screen and ${({ theme: { viewPorts } }) => viewPorts.viewport7} {
+      margin: 0 0 0 auto;
       grid-area: 1 / 2 / 4 / 2;
       width: 12rem;
       height: 12rem;
@@ -103,10 +97,6 @@ const StyledButton = styled(Button)`
   text-decoration: none;
 `;
 
-const StyledLoader = styled(Loader)`
-  margin: 40% auto;
-`;
-
 const DetailsTemplate = ({
   id,
   pageContext,
@@ -115,67 +105,55 @@ const DetailsTemplate = ({
   articleUrl,
   twitterName,
   dateInfo,
-  errorInfo,
-  handleClearErrors,
   handleRemove,
-  isLoading,
 }) => (
   <UserPageTemplate>
-    { errorInfo
-    && (
-    <StyledErrorWrapper>
-      <ErrorModal onClickAction={handleClearErrors}>{errorInfo.statusText}</ErrorModal>
-    </StyledErrorWrapper>
-    ) }
-
-    { isLoading ? <StyledLoader />
-      : (
-        <StyledWrapper
-          animate={{
-            opacity: [0, 1],
-            y: [10, -5, 0],
-          }}
-          transition={{
-            duration: 0.3,
-          }}
+    {id && (
+    <StyledWrapper
+      animate={{
+        opacity: [0, 1],
+        y: [10, -5, 0],
+      }}
+      transition={{
+        duration: 0.3,
+      }}
+      activecolor={pageContext}
+    >
+      {pageContext === 'twitters' && (
+      <StyledImage alt={title} src={`https://unavatar.now.sh/twitter/${twitterName}`} />
+      )}
+      <StyledPageHeader>
+        <StyledHeading big as="h1">
+          {title}
+        </StyledHeading>
+      </StyledPageHeader>
+      <StyledParagraph>{content}</StyledParagraph>
+      {pageContext === 'articles' && <StyledLink href={articleUrl}>Open article</StyledLink>}
+      <DateInfo>
+        {'Posted: '}
+        <Moment format="DD-MMMM-YYYY">
+          {dateInfo}
+        </Moment>
+      </DateInfo>
+      <ButtonsWrapper>
+        <StyledButton
+          as={Link}
+          to={`/${pageContext}`}
           activecolor={pageContext}
         >
-          {pageContext === 'twitters' && (
-          <StyledImage alt={title} src={`https://unavatar.now.sh/twitter/${twitterName}`} />
-          )}
-          <StyledPageHeader>
-            <StyledHeading big as="h1">
-              {title}
-            </StyledHeading>
-          </StyledPageHeader>
-          <StyledParagraph>{content}</StyledParagraph>
-          {pageContext === 'articles' && <StyledLink href={articleUrl}>Open article</StyledLink>}
-          <DateInfo>
-            {'Posted: '}
-            <Moment format="DD-MMMM-YYYY">
-              {dateInfo}
-            </Moment>
-          </DateInfo>
-          <ButtonsWrapper>
-            <StyledButton
-              as={Link}
-              to={`/${pageContext}`}
-              activecolor={pageContext}
-            >
-              close
-            </StyledButton>
-            <StyledButton
-              as={Link}
-              to={`/${pageContext}`}
-              onClick={() => handleRemove(pageContext, id)}
-              activecolor={pageContext}
-            >
-              Remove
-            </StyledButton>
-          </ButtonsWrapper>
-        </StyledWrapper>
-      )}
-
+          close
+        </StyledButton>
+        <StyledButton
+          as={Link}
+          to={`/${pageContext}`}
+          onClick={() => handleRemove(pageContext, id)}
+          activecolor={pageContext}
+        >
+          Remove
+        </StyledButton>
+      </ButtonsWrapper>
+    </StyledWrapper>
+    )}
   </UserPageTemplate>
 );
 
@@ -186,16 +164,7 @@ DetailsTemplate.propTypes = {
   content: PropTypes.string,
   articleUrl: PropTypes.string,
   twitterName: PropTypes.string,
-  isLoading: PropTypes.bool,
-  handleClearErrors: PropTypes.func,
   handleRemove: PropTypes.func,
-  errorInfo: PropTypes.shape({
-    status: PropTypes.oneOfType([
-      PropTypes.string,
-      PropTypes.number,
-    ]),
-    statusText: PropTypes.string,
-  }),
   id: PropTypes.oneOfType([
     PropTypes.string,
     PropTypes.number,
@@ -210,13 +179,7 @@ DetailsTemplate.defaultProps = {
   articleUrl: '',
   twitterName: '',
   id: '',
-  isLoading: false,
-  handleClearErrors: () => {},
   handleRemove: () => {},
-  errorInfo: {
-    status: '',
-    statusText: '',
-  },
 };
 
 export default withContext(DetailsTemplate);
