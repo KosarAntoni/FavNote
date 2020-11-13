@@ -1,5 +1,6 @@
 const initialState = {
   isLoading: false,
+  isNewItemBarVisible: false,
   userJWT: null,
 };
 
@@ -126,6 +127,11 @@ const rootReducer = (state = initialState, action) => {
         ...state,
         authError: null,
         errorInfo: null,
+      };
+    case ('HANDLE_NEW_ITEM_BAR_VISIBILITY'):
+      return {
+        ...state,
+        isNewItemBarVisible: !state.isNewItemBarVisible,
       };
     default: return state;
   }

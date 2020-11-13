@@ -152,3 +152,7 @@ export const addItem = (itemType, itemContent) => (dispatch, getState) => {
 export const clearErrors = () => (dispatch) => {
   dispatch({ type: 'CLEAR_ERRORS' });
 };
+
+export const handleNewItemBarVisibility = () => (dispatch) => {
+  dispatch({ type: 'HANDLE_NEW_ITEM_BAR_VISIBILITY' });
+};

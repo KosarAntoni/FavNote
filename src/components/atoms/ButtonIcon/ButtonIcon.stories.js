@@ -1,5 +1,4 @@
 import React from 'react';
-import plusIcon from 'assets/plus.svg';
 import noteIcon from 'assets/sticky-note-solid.svg';
 import logoutIcon from 'assets/sign-out-alt-solid.svg';
 import penIcon from 'assets/pen-alt-solid.svg';
@@ -42,10 +41,6 @@ export const Logout = () => (
 
 export const Pen = () => (
   <ButtonIcon icon={penIcon} />
-);
-
-export const Plus = () => (
-  <ButtonIcon icon={plusIcon} />
 );
 
 export const Twitter = () => (

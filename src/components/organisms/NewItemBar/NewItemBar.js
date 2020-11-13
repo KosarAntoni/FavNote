@@ -20,7 +20,7 @@ const StyledWrapper = styled.div`
   
   display: flex;
   flex-direction: column;
-  padding: 2rem 2rem 3.3rem;
+  padding: 2rem;
   border-radius: 1rem 1rem 0 0;
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.01), 0 4px 8px rgba(0, 0, 0, 0.02), 0 1px 12px rgba(0, 0, 0, 0.12);
   background-color: ${({ theme }) => theme.white};
@@ -34,7 +34,6 @@ const StyledWrapper = styled.div`
         width: 50rem;
         height: 100%;
         border-radius: 0;
-        padding: 2rem;
         transform: translateX(${({ isVisible }) => (isVisible ? '0' : '110%')});
     }
 `;
@@ -53,6 +52,19 @@ const StyledTextArea = styled(Input)`
   margin-bottom: 2rem;
 `;
 
+const ButtonsWrapper = styled.div`
+  display: flex;
+  justify-content: space-between;
+    @media screen and ${({ theme: { viewPorts } }) => viewPorts.viewport7} {
+      max-width: 30rem
+    }
+`;
+
+const StyledButton = styled(Button)`
+  width: 48%;
+  text-decoration: none;
+`;
+
 const NewItemBar = ({
   pageContext, isVisible, addItem, handleClose,
 }) => (
@@ -62,8 +74,9 @@ const NewItemBar = ({
       initialValues={{
         title: '', content: '', articleUrl: '', twitterName: '', created: '',
       }}
-      onSubmit={(values) => {
+      onSubmit={(values, { resetForm }) => {
         addItem(pageContext, values);
+        resetForm();
         handleClose();
       }}
     >
@@ -108,9 +121,14 @@ const NewItemBar = ({
             value={values.content}
             activecolor={pageContext}
           />
-          <Button type="submit" activecolor={pageContext}>
-            Add Note
-          </Button>
+          <ButtonsWrapper>
+            <StyledButton type="submit" activecolor={pageContext}>
+              Add Note
+            </StyledButton>
+            <StyledButton type="reset" activecolor={pageContext} onClick={handleClose}>
+              close
+            </StyledButton>
+          </ButtonsWrapper>
         </StyledForm>
       )}
     </Formik>
