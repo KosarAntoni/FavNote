@@ -2,13 +2,10 @@ import React, { Component } from 'react';
 import Heading from 'components/atoms/Heading/Heading';
 import Input from 'components/atoms/Input/Input';
 import Paragraph from 'components/atoms/Paragraph/Paragraph';
-import ButtonIcon from 'components/atoms/ButtonIcon/ButtonIcon';
-import plusIcon from 'assets/plus.svg';
 import PropTypes from 'prop-types';
-import styled, { css } from 'styled-components';
+import styled from 'styled-components';
 import withContext from 'hoc/withContext';
 import Masonry from 'react-masonry-css';
-import NewItemBar from 'components/organisms/NewItemBar/NewItemBar';
 import { motion } from 'framer-motion';
 import UserPageTemplate from './UserPageTemplate';
 
@@ -57,54 +54,6 @@ const StyledParagraph = motion.custom(styled(Paragraph)`
   font-weight: ${({ theme }) => theme.bold};
 `);
 
-const StyledPlusButton = styled(ButtonIcon)`
-  position: fixed;
-  bottom: 3rem;
-  right: 2rem;
-  border-radius: 50%;
-  background-color: ${({ activeColor, theme }) => (activeColor ? theme[activeColor] : theme.notes)};
-  background-size: 30%;
-  
-  z-index: 110;
-  transition: all 0.3s;
-
-  ::after {
-    display: block;
-    content: '';
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    border-radius: 50%;
-    top: 0;
-    left: 0;
-    
-    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1), 0 4px 8px rgba(0, 0, 0, 0.08), 0 1px 12px rgba(0, 0, 0, 0.04);
-    
-    transition: all 0.3s;
-  }
-  
-  :focus {
-    outline: none;
-  }
-  
-  :hover {
-      background-color: ${({ theme }) => theme.white};
-  }
-    
-  ${({ isClose }) => isClose && css`
-    transform: rotate(45deg);
-    
-    ::after {
-        transform: rotate(-45deg);
-    }
-  `}  
-    
-    @media screen and ${({ theme: { viewPorts } }) => viewPorts.viewport7} {
-      bottom: 2rem;
-      right: 2rem;
-    }
-`;
-
 const StyledIcon = styled(motion.div)`
     width: 12rem;
     height: 12rem;
@@ -127,7 +76,6 @@ const StyledEmptyPageHeading = motion.custom(styled(Heading)`
 
 class GridTemplate extends Component {
   state = {
-    isNewItemBarVisible: false,
     searchBarValue: '',
     filteredContent: '',
   }
@@ -160,7 +108,7 @@ class GridTemplate extends Component {
     const {
       children, pageContext, isEmpty, icon,
     } = this.props;
-    const { isNewItemBarVisible, searchBarValue, filteredContent } = this.state;
+    const { searchBarValue, filteredContent } = this.state;
     const content = filteredContent || children;
 
     return (
@@ -239,14 +187,6 @@ class GridTemplate extends Component {
           >
             {content}
           </StyledGrid>
-
-          <StyledPlusButton
-            icon={plusIcon}
-            activeColor={pageContext}
-            onClick={this.handleNewItemBarVisible}
-            isClose={isNewItemBarVisible}
-          />
-          <NewItemBar handleClose={this.handleNewItemBarVisible} isVisible={isNewItemBarVisible} />
         </StyledWrapper>
         )}
       </UserPageTemplate>

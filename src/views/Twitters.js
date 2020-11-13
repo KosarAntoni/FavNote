@@ -28,7 +28,7 @@ class Twitters extends Component {
             title={title}
             content={content}
             twitterName={twitterName}
-            key={title}
+            key={id}
           />
         ))}
       </GridTemplate>

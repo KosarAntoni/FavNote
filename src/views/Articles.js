@@ -26,7 +26,7 @@ class Articles extends Component {
             title={title}
             content={content}
             articleUrl={articleUrl}
-            key={title}
+            key={id}
           />
         ))}
       </GridTemplate>

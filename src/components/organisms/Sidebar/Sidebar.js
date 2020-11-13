@@ -6,11 +6,15 @@ import noteIcon from 'assets/sticky-note-solid.svg';
 import logoutIcon from 'assets/sign-out-alt-solid.svg';
 import penIcon from 'assets/pen-alt-solid.svg';
 import twitterIcon from 'assets/twitter-brands.svg';
+import plusIcon from 'assets/edit-solid.svg';
 import PropTypes from 'prop-types';
 import { routes } from 'routes';
 import withContext from 'hoc/withContext';
 import { connect } from 'react-redux';
-import { logout as logoutAction } from 'actions';
+import {
+  logout as logoutAction,
+  handleNewItemBarVisibility as handleNewItemBarVisibilityAction,
+} from 'actions';
 import { motion } from 'framer-motion';
 import { theme } from 'theme/mainTheme';
 
@@ -48,13 +52,6 @@ const SidebarWraper = styled(motion.div)`
     }
 `;
 
-const LogOutButton = styled(ButtonIcon)`
-    order: -1;
-    @media screen and ${({ theme: { viewPorts } }) => viewPorts.viewport7} {
-      order: 1;
-    }
-`;
-
 const ButtonsWrapper = styled.ul`
     list-style: none;
     padding: 0;
@@ -66,7 +63,21 @@ const ButtonsWrapper = styled.ul`
       }
 `;
 
-const Sidebar = ({ pageContext, logout }) => (
+const BreakLine = styled.div`
+  height: 3rem;
+  width: 2px;
+  background-color: ${theme.black};
+  border-radius: 50rem;
+  margin: auto 0.5rem;
+  
+      @media screen and ${({ theme: { viewPorts } }) => viewPorts.viewport7} {
+        height: 2px;
+        width: 60%;
+        margin: 1rem auto;
+      }
+`;
+
+const Sidebar = ({ pageContext, logout, handleNewItemBarVisibility }) => (
   <SidebarWraper
     activeColor={pageContext}
     animate={{ backgroundColor: theme[pageContext] }}
@@ -74,26 +85,32 @@ const Sidebar = ({ pageContext, logout }) => (
   >
     <ButtonsWrapper>
       <li>
-        <ButtonIcon as={NavLink} to={routes.notes} activeClassName="active" icon={noteIcon} />
+        <ButtonIcon as={NavLink} to={routes.notes} activeClassName="active" icon={noteIcon} data-text="Notes" />
       </li>
       <li>
-        <ButtonIcon as={NavLink} to={routes.twitters} activeClassName="active" icon={twitterIcon} />
+        <ButtonIcon as={NavLink} to={routes.twitters} activeClassName="active" icon={twitterIcon} data-text="Twitters" />
       </li>
       <li>
-        <ButtonIcon as={NavLink} to={routes.articles} activeClassName="active" icon={penIcon} />
+        <ButtonIcon as={NavLink} to={routes.articles} activeClassName="active" icon={penIcon} data-text="Articles" />
       </li>
     </ButtonsWrapper>
-    <LogOutButton
+
+    <BreakLine />
+
+    <ButtonIcon onClick={handleNewItemBarVisibility} icon={plusIcon} data-text="New note" />
+    <ButtonIcon
       as={Link}
       to={routes.login}
       onClick={logout}
       icon={logoutIcon}
+      data-text="Log out"
     />
   </SidebarWraper>
 );
 Sidebar.propTypes = {
   pageContext: PropTypes.oneOf(['notes', 'twitters', 'articles']),
   logout: PropTypes.func.isRequired,
+  handleNewItemBarVisibility: PropTypes.func.isRequired,
 };
 
 Sidebar.defaultProps = {
@@ -102,6 +119,7 @@ Sidebar.defaultProps = {
 
 const mapDispatchToProps = (dispatch) => ({
   logout: () => dispatch(logoutAction()),
+  handleNewItemBarVisibility: () => dispatch(handleNewItemBarVisibilityAction()),
 });
 
 export default connect(null, mapDispatchToProps)(withContext(Sidebar));
