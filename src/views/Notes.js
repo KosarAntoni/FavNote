@@ -4,6 +4,7 @@ import Card from 'components/molecules/Card/Card';
 import GridTemplate from 'templates/GridTemplate';
 import PropTypes from 'prop-types';
 import { fetchItems as fetchItemsAction } from 'actions';
+import noteIcon from 'assets/sticky-note-solid.svg';
 
 class Notes extends Component {
   componentDidMount() {
@@ -12,9 +13,9 @@ class Notes extends Component {
   }
 
   render() {
-    const { notes, isLoading } = this.props;
+    const { notes } = this.props;
     return (
-      <GridTemplate isLoading={isLoading}>
+      <GridTemplate isEmpty={notes.length === 0} icon={noteIcon}>
         {notes.map(({
           id, title, content, published_at: publishedAt,
         }, i) => (
@@ -33,7 +34,6 @@ class Notes extends Component {
 }
 
 Notes.propTypes = {
-  isLoading: PropTypes.bool,
   notes: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.number.isRequired,
@@ -46,7 +46,6 @@ Notes.propTypes = {
 };
 
 Notes.defaultProps = {
-  isLoading: false,
   notes: [],
 };
 

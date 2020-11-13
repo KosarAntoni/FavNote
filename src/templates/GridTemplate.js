@@ -22,6 +22,11 @@ const breakpointColumnsObj = {
 const StyledWrapper = styled.div`
   position: relative;
   padding: 0 1rem;
+  min-height: 75vh;
+  display: ${({ isEmpty }) => isEmpty && 'flex'};
+  flex-direction: ${({ isEmpty }) => isEmpty && 'column'};
+  justify-content: ${({ isEmpty }) => isEmpty && 'center'};
+  align-items: ${({ isEmpty }) => isEmpty && 'center'};
   
     @media screen and ${({ theme: { viewPorts } }) => viewPorts.viewport7} {
       padding: 2rem 4rem 4rem 4rem;
@@ -50,7 +55,6 @@ const StyledHeading = motion.custom(styled(Heading)`
 const StyledParagraph = motion.custom(styled(Paragraph)`
   margin: 0;
   font-weight: ${({ theme }) => theme.bold};
-
 `);
 
 const StyledPlusButton = styled(ButtonIcon)`
@@ -101,6 +105,26 @@ const StyledPlusButton = styled(ButtonIcon)`
     }
 `;
 
+const StyledIcon = styled(motion.div)`
+    width: 12rem;
+    height: 12rem;
+    background-image:url(${({ icon }) => icon});
+    background-size: 90%;
+    background-position: center;
+    background-repeat: no-repeat;
+`;
+
+const StyledEmptyPageHeading = motion.custom(styled(Heading)`
+  margin: 2.5rem 0 0 0;
+  text-transform: none;
+  text-align: center;
+  width: 25rem;
+  
+    @media screen and ${({ theme: { viewPorts } }) => viewPorts.viewport7} {
+      width: 100%;
+    }
+`);
+
 class GridTemplate extends Component {
   state = {
     isNewItemBarVisible: false,
@@ -133,12 +157,45 @@ class GridTemplate extends Component {
   }
 
   render() {
-    const { children, pageContext } = this.props;
+    const {
+      children, pageContext, isEmpty, icon,
+    } = this.props;
     const { isNewItemBarVisible, searchBarValue, filteredContent } = this.state;
     const content = filteredContent || children;
 
     return (
       <UserPageTemplate>
+        {isEmpty && (
+        <StyledWrapper isEmpty={isEmpty}>
+          <StyledIcon
+            icon={icon}
+            animate={{
+              opacity: [0, 1],
+              y: [10, -5, 0],
+            }}
+            transition={{
+              duration: 0.3,
+            }}
+          />
+          <StyledEmptyPageHeading
+            animate={{
+              opacity: [0, 1],
+              y: [10, -5, 0],
+            }}
+            transition={{
+              duration: 0.3,
+            }}
+          >
+            Your
+            {' '}
+            {pageContext}
+            {' '}
+            will appear here!
+          </StyledEmptyPageHeading>
+        </StyledWrapper>
+        )}
+
+        {!isEmpty && (
         <StyledWrapper>
           <StyledPageHeader>
             <Input
@@ -191,17 +248,21 @@ class GridTemplate extends Component {
           />
           <NewItemBar handleClose={this.handleNewItemBarVisible} isVisible={isNewItemBarVisible} />
         </StyledWrapper>
+        )}
       </UserPageTemplate>
     );
   }
 }
 
 GridTemplate.propTypes = {
+  isEmpty: PropTypes.bool,
+  icon: PropTypes.string.isRequired,
   children: PropTypes.arrayOf(PropTypes.object).isRequired,
   pageContext: PropTypes.oneOf(['notes', 'twitters', 'articles']),
 };
 
 GridTemplate.defaultProps = {
+  isEmpty: false,
   pageContext: 'notes',
 };
 

@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import Card from 'components/molecules/Card/Card';
 import GridTemplate from 'templates/GridTemplate';
 import { fetchItems as fetchItemsAction } from 'actions';
+import twitterIcon from 'assets/twitter-brands.svg';
 
 class Twitters extends Component {
   componentDidMount() {
@@ -13,10 +14,10 @@ class Twitters extends Component {
   }
 
   render() {
-    const { twitters, isLoading } = this.props;
+    const { twitters } = this.props;
 
     return (
-      <GridTemplate isLoading={isLoading}>
+      <GridTemplate isEmpty={twitters.length === 0} icon={twitterIcon}>
         {twitters.map(({
           id, title, content, twitterName, published_at: publishedAt,
         }, i) => (
@@ -36,7 +37,6 @@ class Twitters extends Component {
 }
 
 Twitters.propTypes = {
-  isLoading: PropTypes.bool,
   twitters: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.number.isRequired,
@@ -50,7 +50,6 @@ Twitters.propTypes = {
 };
 
 Twitters.defaultProps = {
-  isLoading: false,
   twitters: [],
 };
 
