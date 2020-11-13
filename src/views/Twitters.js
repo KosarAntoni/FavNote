@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import Card from 'components/molecules/Card/Card';
 import GridTemplate from 'templates/GridTemplate';
 import { fetchItems as fetchItemsAction } from 'actions';
+import twitterIcon from 'assets/twitter-brands.svg';
 
 class Twitters extends Component {
   componentDidMount() {
@@ -16,7 +17,7 @@ class Twitters extends Component {
     const { twitters, isLoading } = this.props;
 
     return (
-      <GridTemplate isLoading={isLoading}>
+      <GridTemplate isEmpty={twitters.length === 0 && !isLoading} icon={twitterIcon}>
         {twitters.map(({
           id, title, content, twitterName, published_at: publishedAt,
         }, i) => (
@@ -50,8 +51,8 @@ Twitters.propTypes = {
 };
 
 Twitters.defaultProps = {
-  isLoading: false,
   twitters: [],
+  isLoading: false,
 };
 
 const mapStateToProps = ({ twitters, isLoading }) => ({ twitters, isLoading });

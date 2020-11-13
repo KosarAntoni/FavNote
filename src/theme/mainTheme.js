@@ -7,7 +7,7 @@ export const theme = {
   grey200: 'rgb(230, 230, 230)',
   grey300: 'rgb(200, 200, 200)',
   greyHover: 'rgba(230, 230, 230, 0.4)',
-  black: 'rgb(0, 0, 0)',
+  black: 'rgb(32, 33, 36)',
   white: 'rgb(255, 255, 255)',
   whiteHover: 'rgba(255, 255, 255, 0.4)',
   light: 300,

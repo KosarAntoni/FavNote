@@ -4,6 +4,7 @@ import Card from 'components/molecules/Card/Card';
 import GridTemplate from 'templates/GridTemplate';
 import PropTypes from 'prop-types';
 import { fetchItems as fetchItemsAction } from 'actions';
+import penIcon from 'assets/pen-alt-solid.svg';
 
 class Articles extends Component {
   componentDidMount() {
@@ -14,7 +15,7 @@ class Articles extends Component {
   render() {
     const { articles, isLoading } = this.props;
     return (
-      <GridTemplate isLoading={isLoading}>
+      <GridTemplate isEmpty={articles.length === 0 && !isLoading} icon={penIcon}>
         {articles.map(({
           id, title, content, articleUrl, published_at: publishedAt,
         }, i) => (
@@ -48,8 +49,8 @@ Articles.propTypes = {
 };
 
 Articles.defaultProps = {
-  articles: [],
   isLoading: false,
+  articles: [],
 };
 
 const mapStateToProps = ({ articles, isLoading }) => ({ articles, isLoading });

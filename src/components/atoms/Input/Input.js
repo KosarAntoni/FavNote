@@ -8,10 +8,12 @@ const Input = styled.input`
   border: 1px solid ${({ theme }) => theme.grey200};
   border-radius: 1rem;
   transition: all 0.3s;
+  font-family: "Montserrat", sans-serif;
+  color: ${({ theme }) => theme.black};
+
 
   ::placeholder {
     text-transform: uppercase;
-    font-family: "Montserrat", sans-serif;
     font-weight: ${({ theme }) => theme.regular};
     letter-spacing: 1px;
     color: ${({ theme }) => theme.grey300};
