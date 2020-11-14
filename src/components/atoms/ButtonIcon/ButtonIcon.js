@@ -25,6 +25,12 @@ const ButtonIcon = styled.button`
       margin-top: 0;
       width: 6.5rem;
       height: 6.5rem;
+      
+      :hover::after {
+        visibility: visible;
+        opacity: 1;
+        transform: translateX(0);
+      }      
     }
     
    ::after {
@@ -50,12 +56,6 @@ const ButtonIcon = styled.button`
   
   :hover {
     background-color: ${({ theme }) => theme.whiteHover};
-  }
-
-  :hover::after {
-    visibility: visible;
-    opacity: 1;
-    transform: translateX(0);
   }
   
   :focus {
