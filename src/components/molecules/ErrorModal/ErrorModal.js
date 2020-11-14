@@ -3,7 +3,6 @@ import styled from 'styled-components';
 import { motion } from 'framer-motion';
 import Paragraph from 'components/atoms/Paragraph/Paragraph';
 import PropTypes from 'prop-types';
-import ButtonIcon from 'components/atoms/ButtonIcon/ButtonIcon';
 import CloseIcon from 'assets/times-solid.svg';
 
 const StyledWrapper = styled(motion.div)`
@@ -29,15 +28,22 @@ const StyledParagraph = styled(Paragraph)`
   font-weight: ${({ theme }) => theme.regular};
 `;
 
-const StyledCloseButton = styled(ButtonIcon)`
+const StyledCloseButton = styled.button`
   position: absolute;
   top: 0;
   right: 0;
   
+  background-image: url(${CloseIcon});
+  background-color: transparent;
+  background-repeat: no-repeat;
+  background-size: 40%;
+  background-position: 50%;
+  border: none;
   margin: 0;
   padding: 0;
   height: 3rem;
   width: 3rem;
+  cursor: pointer;
   
   :focus {
     outline: none;
@@ -70,7 +76,7 @@ const ErrorModal = ({ children, onClickAction }) => (
     <StyledParagraph>
       {children}
     </StyledParagraph>
-    {onClickAction && <StyledCloseButton icon={CloseIcon} onClick={onClickAction} />}
+    {onClickAction && <StyledCloseButton onClick={onClickAction} />}
   </StyledWrapper>
 );
 

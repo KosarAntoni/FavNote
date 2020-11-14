@@ -11,7 +11,6 @@ const Input = styled.input`
   font-family: "Montserrat", sans-serif;
   color: ${({ theme }) => theme.black};
 
-
   ::placeholder {
     text-transform: uppercase;
     font-weight: ${({ theme }) => theme.regular};
@@ -23,18 +22,27 @@ const Input = styled.input`
     outline: none;
     border-color: transparent;
     box-shadow: 0 0 0 2px ${({ theme, activecolor }) => (activecolor ? theme[activecolor] : theme.notes)} ;
+      ::placeholder {
+        color: ${({ theme }) => theme.grey300};
+      }
   }
   
-  ${({ search }) => (
-    search && css`
+  {${({ search }) => search && css`
       padding: 1rem 2rem 1rem 4rem;
       font-size: ${({ theme }) => theme.fontSize.xs};
       background-image: url(${magnifierIcon});
       background-size: 1.5rem;
       background-position: 1.5rem 50% ;
       background-repeat: no-repeat ;
+  }
     `
-  )
+}
+  {${({ error }) => error && css`
+    box-shadow: 0 0 0 2px ${({ theme }) => (theme.red)};
+      ::placeholder {
+        color: ${({ theme }) => (theme.red)};
+    `
+}
 }
 `;
 
