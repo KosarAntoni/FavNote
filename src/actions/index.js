@@ -1,5 +1,7 @@
 import axios from 'axios';
 
+const defaultError = { status: '000', statusText: 'Server not responding', data: { message: [{ messages: [{ message: 'Server not responding' }] }] } };
+
 export const authenticate = (identifier, password) => (dispatch) => {
   dispatch({ type: 'AUTHENTICATION_REQUEST' });
 
@@ -10,7 +12,7 @@ export const authenticate = (identifier, password) => (dispatch) => {
     }).then((payload) => {
       dispatch({ type: 'AUTHENTICATION_SUCCESS', payload });
     })
-    .catch(({ response }) => {
+    .catch(({ response = defaultError }) => {
       const errorData = response.data;
       dispatch({ type: 'AUTHENTICATION_FAILURE', errorData });
     });
@@ -27,7 +29,7 @@ export const register = (username, email, password) => (dispatch) => {
     }).then((payload) => {
       dispatch({ type: 'REGISTRATION_SUCCESS', payload });
     })
-    .catch(({ response }) => {
+    .catch(({ response = defaultError }) => {
       const errorData = response.data;
       dispatch({ type: 'REGISTRATION_FAILURE', errorData });
     });
@@ -60,7 +62,7 @@ export const fetchItems = (itemType) => (dispatch, getState) => {
         },
       });
     })
-    .catch(({ response }) => {
+    .catch(({ response = defaultError }) => {
       const errorData = {
         status: response.status,
         statusText: response.statusText,
@@ -85,7 +87,7 @@ export const fetchSingleItem = (id) => (dispatch, getState) => {
         payload: data,
       });
     })
-    .catch(({ response }) => {
+    .catch(({ response = defaultError }) => {
       const errorData = {
         status: response.status,
         statusText: response.statusText,
@@ -110,7 +112,7 @@ export const removeItem = (itemType, id) => (dispatch, getState) => {
       },
     })
   ))
-    .catch(({ response }) => {
+    .catch(({ response = defaultError }) => {
       const errorData = {
         status: response.status,
         statusText: response.statusText,
@@ -140,7 +142,7 @@ export const addItem = (itemType, itemContent) => (dispatch, getState) => {
         data,
       },
     })
-  )).catch(({ response }) => {
+  )).catch(({ response = defaultError }) => {
     const errorData = {
       status: response.status,
       statusText: response.statusText,

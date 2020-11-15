@@ -65,7 +65,7 @@ const StyledLink = styled.a`
 const DateInfo = styled(Paragraph)`
   font-weight: ${({ theme }) => theme.bold};
   font-size: ${({ theme }) => theme.fontSize.xs};
-  margin: 0 0 1rem;
+  margin: 1rem 0;
 `;
 
 const StyledImage = styled.img`
