@@ -34,6 +34,28 @@ const StyledLink = styled(Link)`
   margin: 20px 0 50px;
 `;
 
+const validate = (values) => {
+  const errors = {};
+
+  if (!values.username) {
+    errors.username = 'username is required';
+  } else if (values.username.length > 40) {
+    errors.username = 'must be 40 characters or less';
+  }
+
+  if (!values.email) {
+    errors.email = 'email is required';
+  } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)) {
+    errors.email = 'email is invalid';
+  }
+
+  if (!values.password) {
+    errors.password = 'password is required';
+  }
+
+  return errors;
+};
+
 const AuthPage = ({ register }) => (
   <AuthTemplate>
     <Formik
@@ -41,34 +63,43 @@ const AuthPage = ({ register }) => (
       onSubmit={({ username, email, password }) => {
         register(username, email, password);
       }}
+      validate={(values) => validate(values)}
     >
-      {({ handleChange, handleBlur, values }) => (
+      {({
+        handleChange,
+        handleBlur,
+        values,
+        errors,
+      }) => (
         <>
           <Heading>Register</Heading>
           <StyledForm>
             <StyledInput
               type="text"
               name="username"
-              placeholder="Username"
+              placeholder={(errors.username) || 'username'}
               onChange={handleChange}
               onBlur={handleBlur}
               value={values.title}
+              error={(errors.username)}
             />
             <StyledInput
               type="text"
               name="email"
-              placeholder="Email"
+              placeholder={(errors.email) || 'email'}
               onChange={handleChange}
               onBlur={handleBlur}
-              value={values.title}
+              value={values.email}
+              error={(errors.email)}
             />
             <StyledInput
               type="password"
               name="password"
-              placeholder="Password"
+              placeholder={(errors.password) || 'password'}
               onChange={handleChange}
               onBlur={handleBlur}
               value={values.title}
+              error={(errors.password)}
             />
             <Button activecolor="notes" type="submit">
               register

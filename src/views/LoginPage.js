@@ -34,6 +34,22 @@ const StyledLink = styled(Link)`
   margin: 20px 0 50px;
 `;
 
+const validate = (values) => {
+  const errors = {};
+
+  if (!values.username) {
+    errors.username = 'username is required';
+  } else if (values.username.length > 40) {
+    errors.username = 'must be 40 characters or less';
+  }
+
+  if (!values.password) {
+    errors.password = 'password is required';
+  }
+
+  return errors;
+};
+
 const AuthPage = ({ authenticate }) => (
   <AuthTemplate>
     <Formik
@@ -41,26 +57,34 @@ const AuthPage = ({ authenticate }) => (
       onSubmit={({ username, password }) => {
         authenticate(username, password);
       }}
+      validate={(values) => validate(values)}
     >
-      {({ handleChange, handleBlur, values }) => (
+      {({
+        handleChange,
+        handleBlur,
+        values,
+        errors,
+      }) => (
         <>
           <Heading>Sign in</Heading>
           <StyledForm>
             <StyledInput
               type="text"
               name="username"
-              placeholder="Username"
+              placeholder={(errors.username) || 'username'}
               onChange={handleChange}
               onBlur={handleBlur}
               value={values.title}
+              error={(errors.username)}
             />
             <StyledInput
               type="password"
               name="password"
-              placeholder="Password"
+              placeholder={(errors.password) || 'password'}
               onChange={handleChange}
               onBlur={handleBlur}
               value={values.title}
+              error={(errors.password)}
             />
             <Button activecolor="notes" type="submit">
               sign in

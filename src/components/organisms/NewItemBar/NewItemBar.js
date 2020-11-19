@@ -65,103 +65,101 @@ const StyledButton = styled(Button)`
   text-decoration: none;
 `;
 
+const validate = (values, pageContext) => {
+  const errors = {};
+  if (!values.title) {
+    errors.title = 'title is required';
+  }
+  if (!values.content) {
+    errors.content = 'text is required';
+  }
+  if (pageContext === 'twitters' && !values.twitterName) {
+    errors.twitterName = 'twitter name is required';
+  }
+  if (pageContext === 'articles' && !values.articleUrl) {
+    errors.articleUrl = 'link is required';
+  }
+  return errors;
+};
+
 const NewItemBar = ({
   pageContext, isVisible, addItem, handleClose,
-}) => {
-  const validate = (values) => {
-    const errors = {};
-    if (!values.title) {
-      errors.title = 'Required';
-    }
-    if (!values.content) {
-      errors.content = 'Required';
-    }
-    if (pageContext === 'twitters' && !values.twitterName) {
-      errors.twitterName = 'Required';
-    }
-    if (pageContext === 'articles' && !values.articleUrl) {
-      errors.articleUrl = 'Required';
-    }
-    return errors;
-  };
+}) => (
+  <StyledWrapper isVisible={isVisible}>
+    <Heading big>Create new</Heading>
+    <Formik
+      initialValues={{
+        title: '', content: '', articleUrl: '', twitterName: '', created: '',
+      }}
+      validate={(values) => validate(values, pageContext)}
+      onSubmit={(values, { resetForm }) => {
+        addItem(pageContext, values);
+        resetForm();
+        handleClose();
+      }}
+    >
+      {({
+        values, handleChange, handleBlur, errors,
+      }) => (
+        <StyledForm>
+          <StyledInput
+            type="text"
+            name="title"
+            placeholder={(errors.title) || 'title'}
+            onChange={handleChange}
+            onBlur={handleBlur}
+            value={values.title}
+            activecolor={pageContext}
+            error={errors.title}
+          />
+          {pageContext === 'twitters' && (
+          <StyledInput
+            placeholder={(errors.twitterName) || 'twitter name eg. hello_roman'}
+            type="text"
+            name="twitterName"
+            onChange={handleChange}
+            onBlur={handleBlur}
+            value={values.twitterName}
+            activecolor={pageContext}
+            error={errors.twitterName}
+          />
+          )}
+          {pageContext === 'articles' && (
+          <StyledInput
+            placeholder={(errors.articleUrl) || 'link'}
+            type="text"
+            name="articleUrl"
+            onChange={handleChange}
+            onBlur={handleBlur}
+            value={values.articleUrl}
+            activecolor={pageContext}
+            error={errors.articleUrl}
+          />
+          )}
+          <StyledTextArea
+            name="content"
+            placeholder={(errors.content) || 'text'}
+            as="textarea"
+            onChange={handleChange}
+            onBlur={handleBlur}
+            value={values.content}
+            activecolor={pageContext}
+            error={errors.content}
+          />
+          <ButtonsWrapper>
+            <StyledButton type="submit" activecolor={pageContext}>
+              Add Note
+            </StyledButton>
+            <StyledButton type="reset" activecolor={pageContext} onClick={handleClose}>
+              close
+            </StyledButton>
+          </ButtonsWrapper>
+        </StyledForm>
+      )}
+    </Formik>
 
-  return (
-    <StyledWrapper isVisible={isVisible}>
-      <Heading big>Create new</Heading>
-      <Formik
-        initialValues={{
-          title: '', content: '', articleUrl: '', twitterName: '', created: '',
-        }}
-        validate={(values) => validate(values)}
-        onSubmit={(values, { resetForm }) => {
-          addItem(pageContext, values);
-          resetForm();
-          handleClose();
-        }}
-      >
-        {({
-          values, handleChange, handleBlur, errors,
-        }) => (
-          <StyledForm>
-            <StyledInput
-              type="text"
-              name="title"
-              placeholder={(errors.title && 'title is required') || 'title'}
-              onChange={handleChange}
-              onBlur={handleBlur}
-              value={values.title}
-              activecolor={pageContext}
-              error={errors.title}
-            />
-            {pageContext === 'twitters' && (
-              <StyledInput
-                placeholder={(errors.twitterName && 'twitter name is required') || 'twitter name eg. hello_roman'}
-                type="text"
-                name="twitterName"
-                onChange={handleChange}
-                onBlur={handleBlur}
-                value={values.twitterName}
-                activecolor={pageContext}
-                error={errors.twitterName}
-              />
-            )}
-            {pageContext === 'articles' && (
-              <StyledInput
-                placeholder={(errors.articleUrl && 'link is required') || 'link'}
-                type="text"
-                name="articleUrl"
-                onChange={handleChange}
-                onBlur={handleBlur}
-                value={values.articleUrl}
-                activecolor={pageContext}
-                error={errors.articleUrl}
-              />
-            )}
-            <StyledTextArea
-              name="content"
-              placeholder={(errors.content && 'text is required') || 'text'}
-              as="textarea"
-              onChange={handleChange}
-              onBlur={handleBlur}
-              value={values.content}
-              activecolor={pageContext}
-              error={errors.content}
-            />
-            <ButtonsWrapper>
-              <StyledButton type="submit" activecolor={pageContext}>
-                Add Note
-              </StyledButton>
-              <StyledButton type="reset" activecolor={pageContext} onClick={handleClose}>
-                close
-              </StyledButton>
-            </ButtonsWrapper>
-          </StyledForm>
-        )}
-      </Formik>
-
-    </StyledWrapper>
-  );
-};
+  </StyledWrapper>
+);
 
 NewItemBar.propTypes = {
   pageContext: PropTypes.oneOf(['notes', 'twitters', 'articles']),

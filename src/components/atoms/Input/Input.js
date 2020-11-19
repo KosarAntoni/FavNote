@@ -2,7 +2,7 @@ import styled, { css } from 'styled-components';
 import magnifierIcon from 'assets/magnifier.svg';
 
 const Input = styled.input`
-  padding: 1.5rem 3rem;
+  padding: 1.5rem;
   font-size: ${({ theme }) => theme.fontSize.s};
   font-weight: ${({ theme }) => theme.regular};
   border: 1px solid ${({ theme }) => theme.grey200};
