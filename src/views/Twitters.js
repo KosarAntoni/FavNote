@@ -40,7 +40,7 @@ Twitters.propTypes = {
   isLoading: PropTypes.bool,
   twitters: PropTypes.arrayOf(
     PropTypes.shape({
-      id: PropTypes.number.isRequired,
+      id: PropTypes.string.isRequired,
       published_at: PropTypes.string.isRequired,
       title: PropTypes.string.isRequired,
       content: PropTypes.string.isRequired,

@@ -14,7 +14,8 @@ const persistConfig = { // configuration object for redux-persist
 
 const persistedReducer = persistReducer(persistConfig, notesApp);
 
-const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+// const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+const composeEnhancers = compose;
 const store = createStore(persistedReducer, /* preloadedState, */ composeEnhancers(
   applyMiddleware(thunk),
 ));

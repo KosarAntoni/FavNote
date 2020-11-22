@@ -10,7 +10,7 @@ import ErrorModal from 'components/molecules/ErrorModal/ErrorModal';
 import { withRouter } from 'react-router-dom';
 import Loader from 'components/atoms/Loader/Loader';
 import styled from 'styled-components';
-import { AnimatePresence } from 'framer-motion';
+import { AnimatePresence, motion } from 'framer-motion';
 import { routes } from 'routes';
 import NewItemBar from 'components/organisms/NewItemBar/NewItemBar';
 
@@ -27,7 +27,7 @@ const ErrorWrapper = styled.div`
   z-index: 100;
 `;
 
-const StyledWrapper = styled.div`
+const StyledWrapper = styled(motion.div)`
   position: fixed;
   top: 0;
   left: 0;
@@ -71,11 +71,27 @@ const UserPageTemplate = ({
       </AnimatePresence>
       <Sidebar />
       {isLoading && (
-      <StyledWrapper>
+      <StyledWrapper
+        initial={{
+          opacity: 0,
+          scale: 0.95,
+        }}
+        animate={{
+          opacity: 1,
+          scale: 1,
+        }}
+        exit={{
+          opacity: 0,
+          scale: 0.95,
+        }}
+        transition={{
+          duration: 0.3,
+        }}
+      >
         <Loader />
       </StyledWrapper>
       )}
-      {children}
+      {!isLoading && children}
       <NewItemBar
         handleClose={handleNewItemBarVisibility}
         isVisible={isNewItemBarVisible}

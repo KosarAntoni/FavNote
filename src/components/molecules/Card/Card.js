@@ -154,7 +154,7 @@ class Card extends Component {
 Card.propTypes = {
   animationDelay: PropTypes.number,
   pageContext: PropTypes.oneOf(['notes', 'twitters', 'articles']),
-  id: PropTypes.number.isRequired,
+  id: PropTypes.string.isRequired,
   dateInfo: PropTypes.string.isRequired,
   title: PropTypes.string.isRequired,
   twitterName: PropTypes.string,

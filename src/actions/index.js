@@ -1,12 +1,13 @@
 import axios from 'axios';
 
 const defaultError = { status: '000', statusText: 'Server not responding', data: { message: [{ messages: [{ message: 'Server not responding' }] }] } };
+const backendPath = 'https://damp-eyrie-20025.herokuapp.com';
 
 export const authenticate = (identifier, password) => (dispatch) => {
   dispatch({ type: 'AUTHENTICATION_REQUEST' });
 
   return axios
-    .post('http://localhost:1337/auth/local', {
+    .post(`${backendPath}/auth/local`, {
       identifier,
       password,
     }).then((payload) => {
@@ -22,7 +23,7 @@ export const register = (username, email, password) => (dispatch) => {
   dispatch({ type: 'REGISTRATION_REQUEST' });
 
   return axios
-    .post('http://localhost:1337/auth/local/register', {
+    .post(`${backendPath}/auth/local/register`, {
       username,
       email,
       password,
@@ -43,7 +44,7 @@ export const fetchItems = (itemType) => (dispatch, getState) => {
   dispatch({ type: 'FETCH_REQUEST' });
 
   return axios
-    .get('http://localhost:1337/notes', {
+    .get(`${backendPath}/notes`, {
       headers: {
         Authorization:
           `Bearer ${getState().userJWT}`,
@@ -75,7 +76,7 @@ export const fetchSingleItem = (id) => (dispatch, getState) => {
   dispatch({ type: 'FETCH_ITEM_REQUEST' });
 
   return axios
-    .get(`http://localhost:1337/notes/${id}`, {
+    .get(`${backendPath}/notes/${id}`, {
       headers: {
         Authorization:
           `Bearer ${getState().userJWT}`,
@@ -98,7 +99,7 @@ export const fetchSingleItem = (id) => (dispatch, getState) => {
 
 export const removeItem = (itemType, id) => (dispatch, getState) => {
   dispatch({ type: 'REMOVE_ITEM_REQUEST' });
-  axios.delete(`http://localhost:1337/notes/${id}`, {
+  axios.delete(`${backendPath}/notes/${id}`, {
     headers: {
       Authorization:
         `Bearer ${getState().userJWT}`,
@@ -123,7 +124,7 @@ export const removeItem = (itemType, id) => (dispatch, getState) => {
 
 export const addItem = (itemType, itemContent) => (dispatch, getState) => {
   dispatch({ type: 'ADD_ITEM_REQUEST' });
-  axios.post('http://localhost:1337/notes',
+  axios.post(`${backendPath}/notes`,
     {
       userID: getState().userID,
       type: itemType,
