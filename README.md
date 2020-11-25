@@ -9,7 +9,7 @@
 * [Contact](#contact)
 
 ## Technologies
-#####Frontend: 
+##### Frontend: 
 >hosted by [netlify](https://www.netlify.com/)
 * React v16.13.1
 * React Redux && local storage
@@ -23,7 +23,7 @@
 * Axios
 * Atomic designed
 
-#####Backend: 
+##### Backend: 
 >hosted by [heroku](https://www.heroku.com/)
 * Strapi v3.3.3
 
