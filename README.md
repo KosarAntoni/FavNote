@@ -31,7 +31,7 @@
 #### [Link to live](https://favnotebykosar.netlify.app/) <br/>
 You can log in using: 
 "DemoUser" as username <br/> 
-"Password" as password <br/>
+"password" as password <br/>
 >Note: it may take few minutes while servers starts
 
 
